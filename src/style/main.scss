@@ -1,0 +1,39 @@
+@import 'animation';
+
+body {
+  margin: 0;
+  padding: 0;
+
+  font: 500 16px "Helvetica Neue", "ヒラギノ角ゴ ProN", sans-serif;
+}
+
+a {
+  color: #147;
+  text-decoration: none;
+
+  cursor: pointer;
+
+  // ---
+
+  $hoveron: animation-id();
+  @include keyframes( $hoveron ) {
+    0% { opacity: 1.0; }
+    100% { opacity: 0.5; }
+  }
+
+  &:hover {
+    opacity: 0.5;
+    @include animation( $hoveron 0.1s ease );
+  }
+
+  // ---
+
+  $hoveroff: animation-id();
+  @include keyframes( $hoveroff ) {
+    0% { opacity: 0.5; }
+    100% { opacity: 1.0; }
+  }
+  @include animation( $hoveroff 0.1s ease );
+}
+
+@import 'list';

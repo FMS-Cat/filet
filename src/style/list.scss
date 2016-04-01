@@ -1,0 +1,45 @@
+#list {
+  position: absolute;
+  left: calc( 50% - 300px );
+  width: 600px;
+
+  #current {
+    font-size: 2em;
+    margin: 1em 0;
+  }
+
+  #items {
+    width: 100%;
+
+    .item {
+      position: relative;
+      width: calc( 100% - 80px );
+      height: 1em;
+      padding: 0.8em 40px;
+
+      border-bottom: 1px solid #ddd;
+
+      .icon {
+        position:absolute;
+        left: 20px;
+        width: 1.2em;
+        height: 1.2em;
+      }
+
+      .filename {
+        position: absolute;
+        left: 60px;
+        width: 200px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .date {
+        position: absolute;
+        left: 300px;
+      }
+    }
+  }
+}
