@@ -87,12 +87,10 @@
     } );
   } );
 
-  gulp.task( 'browser-reload', function() {
-    browserSync.reload();
-  } );
-
   gulp.task( 'browser-watch', function() {
-    gulp.watch( [ './dist/**', '!./dist/**/*.css' ], [ 'browser-reload' ] );
+    gulp.watch( [ './dist/**', '!./dist/**/*.css' ], function() {
+      browserSync.reload();
+    } );
   } );
 
   // ---

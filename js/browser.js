@@ -29,7 +29,7 @@ module.exports = ( function() {
           return;
         }
 
-        doc += '\n<script>browser( \'' + _req.url + '\', ' + _stat.isDirectory() + ' );</script>';
+        doc += '\n<script>browser( \'' + _req.url + '\', ' + _stat.isDirectory() + ', true );</script>';
         _res.send( doc );
       } );
     } );
