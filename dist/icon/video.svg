@@ -1,0 +1,81 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 100 100"
+  width="256"
+  height="256"
+  font-family="Helvetica Neue"
+  font-weight="300"
+>
+  <path fill="#000" d="
+    M 0 90
+    l 100 0
+    l 0 -80
+    l -100 0
+    z
+
+    M 35 35
+    l 30 15
+    l -30 15
+    z
+
+    M 5 15
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 5 30
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 5 45
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 5 60
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 5 75
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 85 15
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 85 30
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 85 45
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 85 60
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+
+    M 85 75
+    l 10 0
+    l 0 10
+    l -10 0
+    z
+  " />
+</svg>
