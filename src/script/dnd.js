@@ -1,13 +1,15 @@
 module.exports = ( function() {
 
-  let dnd = function( _props ) {
+  'use strict';
+
+  let DnD = function( _props ) {
 
     // _props: { element, enter, leave, drop }
 
     // Ref: http://stackoverflow.com/questions/7110353/html5-dragleave-fired-when-hovering-a-child-element
-    var editorDragCounter = 0;
+    let editorDragCounter = 0;
 
-    _props.element.addEventListener( 'dragenter', function( _event ) {
+    let dragenter = function( _event ) {
       _event.preventDefault();
       _event.stopPropagation();
 
@@ -18,14 +20,16 @@ module.exports = ( function() {
       }
 
       editorDragCounter ++;
-    } );
+    };
+    _props.element.addEventListener( 'dragenter', dragenter );
 
-    _props.element.addEventListener( 'dragover', function( _event ) {
+    let dragover = function( _event ) {
       _event.preventDefault();
       _event.stopPropagation();
-    } );
+    };
+    _props.element.addEventListener( 'dragover', dragover );
 
-    _props.element.addEventListener( 'dragleave', function( _event ) {
+    let dragleave = function( _event ) {
       _event.preventDefault();
       _event.stopPropagation();
 
@@ -36,9 +40,10 @@ module.exports = ( function() {
           _props.leave( _event );
         }
       }
-    } );
+    };
+    _props.element.addEventListener( 'dragleave', dragleave );
 
-    _props.element.addEventListener( 'drop', function( _event ) {
+    let drop = function( _event ) {
       _event.preventDefault();
       _event.stopPropagation();
 
@@ -46,10 +51,18 @@ module.exports = ( function() {
       if ( typeof _props.drop === 'function' ) {
         _props.drop( _event );
       }
-    } );
+    };
+    _props.element.addEventListener( 'drop', drop );
+
+    return function() {
+      _props.element.removeEventListener( 'dragenter', dragenter );
+      _props.element.removeEventListener( 'dragover', dragover );
+      _props.element.removeEventListener( 'dragleave', dragleave );
+      _props.element.removeEventListener( 'drop', drop );
+    };
 
   };
 
-  return dnd;
+  return DnD;
 
 } )();

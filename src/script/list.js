@@ -4,7 +4,8 @@ module.exports = ( function() {
 
   let el = require( './el' );
   let selectIcon = require( './select-icon' );
-  let dnd = require( './dnd' );
+  let DnD = require( './dnd' );
+  let dnd;
   let post = require( './post' );
 
   let list = function( _data ) {
@@ -99,7 +100,8 @@ module.exports = ( function() {
       src: location.href.replace( /\/browser.*/, '/static/image/upload.svg' )
     } );
 
-    dnd( {
+    if ( typeof dnd === 'function' ) { dnd(); }
+    dnd = DnD( {
       element: container,
       enter: function() {
         uploadBg.classList.add( 'on' );
