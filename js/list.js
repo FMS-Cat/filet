@@ -10,12 +10,12 @@ module.exports = ( function() {
     let dirPath = _req.body.path || '.';
     dirPath = dirPath.replace( /\/$/, '' );
     dirPath = '.' + dirPath;
-    dirPath = dirPath.replace( /\.{2-}/, '.' );
+    dirPath = dirPath.replace( /\.{2,}/, '.' );
 
     let ret = {};
     ret.items = [];
 
-    ret.current = dirPath;
+    ret.path = dirPath;
 
     fs.readdir( dirPath, function( _error, _files ) {
       if ( _error ) {

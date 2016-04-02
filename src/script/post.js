@@ -6,7 +6,7 @@ module.exports = ( function() {
       'url': 'about:blank',
       'data': {},
       'callback': function( _status, _data ) {},
-      'responseType': 'string'
+      'responseType': 'text'
     };
 
     for ( let key in _params ) {
@@ -15,7 +15,16 @@ module.exports = ( function() {
 
     let formData = new FormData();
     for ( let key in params.data ) {
-      formData.append( key, params.data[ key ] );
+      if (
+        typeof params.data[ key ] === 'object'
+        && params.data[ key ].length
+      ) {
+        for ( let iFile = 0; iFile < params.data[ key ].length; iFile ++ ) {
+          formData.append( key, params.data[ key ][ iFile ] );
+        }
+      } else {
+        formData.append( key, params.data[ key ] );
+      }
     }
 
     let xhr = new XMLHttpRequest();

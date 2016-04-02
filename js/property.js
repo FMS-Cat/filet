@@ -10,7 +10,7 @@ module.exports = ( function() {
     let path = _req.body.path || '.';
     path = path.replace( /\/$/, '' );
     path = '.' + path;
-    path = path.replace( /\.{2-}/, '.' );
+    path = path.replace( /\.{2,}/, '.' );
 
     let ret = {};
 

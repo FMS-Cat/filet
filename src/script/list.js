@@ -2,6 +2,11 @@ module.exports = ( function() {
 
   'use strict';
 
+  let el = require( './el' );
+  let selectIcon = require( './select-icon' );
+  let dnd = require( './dnd' );
+  let post = require( './post' );
+
   let list = function( _data ) {
     while ( container.firstChild ) {
       container.removeChild( container.firstChild );
@@ -9,24 +14,31 @@ module.exports = ( function() {
 
     // ---
 
-    let list = document.createElement( 'div' );
-    container.appendChild( list );
-    list.id = 'list';
+    let list = el( {
+      tag: 'div',
+      parent: container,
+      id: 'list'
+    } );
 
     // ---
 
-    let current = document.createElement( 'div' );
-    list.appendChild( current );
-    current.id = 'current';
-    current.innerText = _data.current;
+    let current = el( {
+      tag: 'div',
+      parent: list,
+      id: 'current',
+      innerText: _data.path
+    } );
 
     // ---
 
-    let items = document.createElement( 'div' );
-    list.appendChild( items );
-    items.id = 'items';
+    let items = el( {
+      tag: 'div',
+      parent: list,
+      id: 'items'
+    } );
 
     _data.items.map( function( _item ) {
+
       let onclick = function() {
         let path = _item.path.substring( 1 ) + '/' + _item.name;
         browser( path, !!_item.dir );
@@ -34,32 +46,90 @@ module.exports = ( function() {
 
       // ---
 
-      let item = document.createElement( 'div' );
-      items.appendChild( item );
-      item.classList.add( 'item' );
+      let item = el( {
+        tag: 'div',
+        parent: items,
+        class: 'item'
+      } );
 
-      let icon = document.createElement( 'img' );
-      item.appendChild( icon );
-      icon.classList.add( 'icon' );
-      let staticIcon = location.href.replace( /\/browser.*/, '/static/icon/' );
-      if ( _item.dir ) {
-        icon.src = staticIcon + 'dir.svg';
-      } else {
-        icon.src = staticIcon + ( require( './select-icon' ) )( _item.name );
-      }
+      let icon = el( {
+        tag: 'img',
+        parent: item,
+        class: 'icon',
+        src: ( function() {
+          let staticIcon = location.href.replace( /\/browser.*/, '/static/icon/' );
+          if ( _item.dir ) {
+            return staticIcon + 'dir.svg';
+          } else {
+            return staticIcon + selectIcon( _item.name );
+          }
+        } )()
+      } );
 
-      let name = document.createElement( 'a' );
-      item.appendChild( name );
-      name.classList.add( 'filename' );
-      name.onclick = onclick;
-      name.innerText = _item.name;
+      let name = el( {
+        tag: 'a',
+        parent: item,
+        class: 'filename',
+        onclick: onclick,
+        innerText: _item.name
+      } );
 
       let date = new Date( _item.stats.birthtime );
-      let dateSpan = document.createElement( 'span' );
-      item.appendChild( dateSpan );
-      dateSpan.classList.add( 'date' );
-      dateSpan.innerText = date.toLocaleString();
+      let dateSpan = el( {
+        tag: 'span',
+        parent: item,
+        class: 'date',
+        innerText: date.toLocaleString()
+      } );
+
     } );
+
+    // ---
+
+    let uploadBg = el( {
+      tag: 'div',
+      parent: container,
+      class: 'uploadBg'
+    } );
+
+    let uploadIcon = el( {
+      tag: 'img',
+      parent: container,
+      class: 'uploadIcon',
+      src: location.href.replace( /\/browser.*/, '/static/image/upload.svg' )
+    } );
+
+    dnd( {
+      element: container,
+      enter: function() {
+        uploadBg.classList.add( 'on' );
+        uploadBg.classList.remove( 'off' );
+        uploadIcon.classList.add( 'on' );
+        uploadIcon.classList.remove( 'off' );
+        uploadIcon.classList.remove( 'drop' );
+      },
+      leave: function() {
+        uploadBg.classList.remove( 'on' );
+        uploadBg.classList.add( 'off' );
+        uploadIcon.classList.remove( 'on' );
+        uploadIcon.classList.add( 'off' );
+      },
+      drop: function( _event ) {
+        uploadBg.classList.remove( 'on' );
+        uploadBg.classList.add( 'off' );
+        uploadIcon.classList.remove( 'on' );
+        uploadIcon.classList.add( 'drop' );
+
+        post( {
+          url: location.href.replace( /\/browser.*/, '/upload' ),
+          data: {
+            path: _data.path,
+            files: _event.dataTransfer.files
+          }
+        } );
+      },
+    } );
+
   };
 
   return list;

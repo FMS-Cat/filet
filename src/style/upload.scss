@@ -1,0 +1,94 @@
+.uploadBg {
+  position: fixed;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+
+  background: #000;
+  opacity: 0.0;
+  pointer-events: none;
+
+  &.on {
+    opacity: 0.5;
+
+    $ani: animation-id();
+    @include keyframes( $ani ) {
+      0% { opacity: 0.0; }
+      100% { opacity: 0.5; }
+    }
+    @include animation( $ani 0.1s ease );
+  }
+
+  &.off {
+    opacity: 0.0;
+
+    $ani: animation-id();
+    @include keyframes( $ani ) {
+      0% { opacity: 0.5; }
+      100% { opacity: 0.0; }
+    }
+    @include animation( $ani 0.1s ease );
+  }
+}
+
+.uploadIcon {
+  position: fixed;
+  left: calc( 50% - 8em );
+  top: calc( 50% - 8em );
+  width: 16em;
+  height: 16em;
+
+  opacity: 0.0;
+
+  &.on {
+    opacity: 0.8;
+
+    $ani: animation-id();
+    @include keyframes( $ani ) {
+      0% {
+        opacity: 0.0;
+        transform: scale( 0.9 );
+      }
+      100% {
+        opacity: 0.8;
+        transform: scale( 1.0 );
+      }
+    }
+    @include animation( $ani 0.1s ease );
+  }
+
+  &.off {
+    opacity: 0.0;
+
+    $ani: animation-id();
+    @include keyframes( $ani ) {
+      0% {
+        opacity: 0.8;
+        transform: translate( 0, 0 );
+      }
+      100% {
+        opacity: 0.0;
+        transform: translate( 0, 1em );
+      }
+    }
+    @include animation( $ani 0.1s ease );
+  }
+
+  &.drop {
+    opacity: 0.0;
+
+    $ani: animation-id();
+    @include keyframes( $ani ) {
+      0% {
+        opacity: 0.8;
+        transform: translate( 0, 0 );
+      }
+      100% {
+        opacity: 0.0;
+        transform: translate( 0, -1em );
+      }
+    }
+    @include animation( $ani 0.1s ease );
+  }
+}

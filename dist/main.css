@@ -1,0 +1,257 @@
+@charset "UTF-8";
+body {
+  margin: 0;
+  padding: 0;
+  font: 500 16px "Helvetica Neue", "ヒラギノ角ゴ ProN", sans-serif; }
+
+a {
+  color: #147;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-animation: "animation2" 0.1s ease;
+  -moz-animation: "animation2" 0.1s ease;
+  animation: "animation2" 0.1s ease;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  animation-fill-mode: both; }
+
+@-webkit-keyframes animation1 {
+  0% {
+    opacity: 1.0; }
+  100% {
+    opacity: 0.5; } }
+
+@-moz-keyframes animation1 {
+  0% {
+    opacity: 1.0; }
+  100% {
+    opacity: 0.5; } }
+
+@keyframes animation1 {
+  0% {
+    opacity: 1.0; }
+  100% {
+    opacity: 0.5; } }
+  a:hover {
+    opacity: 0.5;
+    -webkit-animation: "animation1" 0.1s ease;
+    -moz-animation: "animation1" 0.1s ease;
+    animation: "animation1" 0.1s ease;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both; }
+
+@-webkit-keyframes animation2 {
+  0% {
+    opacity: 0.5; }
+  100% {
+    opacity: 1.0; } }
+
+@-moz-keyframes animation2 {
+  0% {
+    opacity: 0.5; }
+  100% {
+    opacity: 1.0; } }
+
+@keyframes animation2 {
+  0% {
+    opacity: 0.5; }
+  100% {
+    opacity: 1.0; } }
+
+#list {
+  position: absolute;
+  left: calc( 50% - 300px);
+  width: 600px; }
+  #list #current {
+    font-size: 2em;
+    margin: 1em 0; }
+  #list #items {
+    width: 100%; }
+    #list #items .item {
+      position: relative;
+      width: calc( 100% - 80px);
+      height: 1em;
+      padding: 0.8em 40px;
+      border-bottom: 1px solid #ddd; }
+      #list #items .item .icon {
+        position: absolute;
+        left: 20px;
+        width: 1.2em;
+        height: 1.2em; }
+      #list #items .item .filename {
+        position: absolute;
+        left: 60px;
+        width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; }
+      #list #items .item .date {
+        position: absolute;
+        left: 300px; }
+
+.uploadBg {
+  position: fixed;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.0;
+  pointer-events: none; }
+  .uploadBg.on {
+    opacity: 0.5;
+    -webkit-animation: "animation3" 0.1s ease;
+    -moz-animation: "animation3" 0.1s ease;
+    animation: "animation3" 0.1s ease;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both; }
+
+@-webkit-keyframes animation3 {
+  0% {
+    opacity: 0.0; }
+  100% {
+    opacity: 0.5; } }
+
+@-moz-keyframes animation3 {
+  0% {
+    opacity: 0.0; }
+  100% {
+    opacity: 0.5; } }
+
+@keyframes animation3 {
+  0% {
+    opacity: 0.0; }
+  100% {
+    opacity: 0.5; } }
+  .uploadBg.off {
+    opacity: 0.0;
+    -webkit-animation: "animation4" 0.1s ease;
+    -moz-animation: "animation4" 0.1s ease;
+    animation: "animation4" 0.1s ease;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both; }
+
+@-webkit-keyframes animation4 {
+  0% {
+    opacity: 0.5; }
+  100% {
+    opacity: 0.0; } }
+
+@-moz-keyframes animation4 {
+  0% {
+    opacity: 0.5; }
+  100% {
+    opacity: 0.0; } }
+
+@keyframes animation4 {
+  0% {
+    opacity: 0.5; }
+  100% {
+    opacity: 0.0; } }
+
+.uploadIcon {
+  position: fixed;
+  left: calc( 50% - 8em);
+  top: calc( 50% - 8em);
+  width: 16em;
+  height: 16em;
+  opacity: 0.0; }
+  .uploadIcon.on {
+    opacity: 0.8;
+    -webkit-animation: "animation5" 0.1s ease;
+    -moz-animation: "animation5" 0.1s ease;
+    animation: "animation5" 0.1s ease;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both; }
+
+@-webkit-keyframes animation5 {
+  0% {
+    opacity: 0.0;
+    transform: scale(0.9); }
+  100% {
+    opacity: 0.8;
+    transform: scale(1); } }
+
+@-moz-keyframes animation5 {
+  0% {
+    opacity: 0.0;
+    transform: scale(0.9); }
+  100% {
+    opacity: 0.8;
+    transform: scale(1); } }
+
+@keyframes animation5 {
+  0% {
+    opacity: 0.0;
+    transform: scale(0.9); }
+  100% {
+    opacity: 0.8;
+    transform: scale(1); } }
+  .uploadIcon.off {
+    opacity: 0.0;
+    -webkit-animation: "animation6" 0.1s ease;
+    -moz-animation: "animation6" 0.1s ease;
+    animation: "animation6" 0.1s ease;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both; }
+
+@-webkit-keyframes animation6 {
+  0% {
+    opacity: 0.8;
+    transform: translate(0, 0); }
+  100% {
+    opacity: 0.0;
+    transform: translate(0, 1em); } }
+
+@-moz-keyframes animation6 {
+  0% {
+    opacity: 0.8;
+    transform: translate(0, 0); }
+  100% {
+    opacity: 0.0;
+    transform: translate(0, 1em); } }
+
+@keyframes animation6 {
+  0% {
+    opacity: 0.8;
+    transform: translate(0, 0); }
+  100% {
+    opacity: 0.0;
+    transform: translate(0, 1em); } }
+  .uploadIcon.drop {
+    opacity: 0.0;
+    -webkit-animation: "animation7" 0.1s ease;
+    -moz-animation: "animation7" 0.1s ease;
+    animation: "animation7" 0.1s ease;
+    -webkit-animation-fill-mode: both;
+    -moz-animation-fill-mode: both;
+    animation-fill-mode: both; }
+
+@-webkit-keyframes animation7 {
+  0% {
+    opacity: 0.8;
+    transform: translate(0, 0); }
+  100% {
+    opacity: 0.0;
+    transform: translate(0, -1em); } }
+
+@-moz-keyframes animation7 {
+  0% {
+    opacity: 0.8;
+    transform: translate(0, 0); }
+  100% {
+    opacity: 0.0;
+    transform: translate(0, -1em); } }
+
+@keyframes animation7 {
+  0% {
+    opacity: 0.8;
+    transform: translate(0, 0); }
+  100% {
+    opacity: 0.0;
+    transform: translate(0, -1em); } }

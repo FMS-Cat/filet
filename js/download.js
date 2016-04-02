@@ -15,7 +15,7 @@ module.exports = ( function() {
     }
     dirPath = dirPath.replace( /\/$/, '' );
     dirPath = '.' + dirPath;
-    dirPath = dirPath.replace( /\.{2-}/, '.' );
+    dirPath = dirPath.replace( /\.{2,}/, '.' );
 
     fs.stat( dirPath, function( _error, _stat ) {
       if ( _error ) {
@@ -29,7 +29,7 @@ module.exports = ( function() {
       }
 
       if ( _stat.isDirectory() ) {
-        let name = 'temp/' + ( +new Date() ) + '.zip';
+        let name = __dirname + '/temp/' + ( +new Date() ) + '.zip';
         let out = fs.createWriteStream( name );
         let zip = archiver( 'zip' );
 

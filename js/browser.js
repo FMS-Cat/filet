@@ -15,10 +15,13 @@ module.exports = ( function() {
         return;
       }
 
+      let path = _req.url;
+      path = decodeURI( path );
+
       let staticUrl = _req.protocol + '://' + _req.get( 'host' ) + '/static';
       let doc = _data.replace( /\$\$static\$\$/g, staticUrl );
 
-      fs.stat( '.' + _req.url, function( _error, _stat ) {
+      fs.stat( '.' + path, function( _error, _stat ) {
         if ( _error ) {
           if ( _error.code === 'ENOENT' ) {
             _res.status( 404 ).send( 'no such file or directory' );
@@ -29,7 +32,7 @@ module.exports = ( function() {
           return;
         }
 
-        doc += '\n<script>browser( \'' + _req.url + '\', ' + _stat.isDirectory() + ', true );</script>';
+        doc += '\n<script>browser( \'' + path + '\', ' + _stat.isDirectory() + ', false );</script>';
         _res.send( doc );
       } );
     } );
