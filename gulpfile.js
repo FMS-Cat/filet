@@ -36,11 +36,6 @@
     'packageCache': {},
     'fullPaths': true,
     'entries': [ './src/script/main.js' ],
-    'transform': [
-      [ babelify, {
-        'presets': 'es2015'
-      } ]
-    ]
   } ) );
 
   let bundle = function() {
