@@ -7,7 +7,7 @@ module.exports = ( function() {
   let property = function( _req, _res ) {
 
     let path = _req.body.path;
-    if ( !dirPath ) {
+    if ( !path ) {
       _res.status( 400 ).send( 'file path is required' );
       return;
     }
