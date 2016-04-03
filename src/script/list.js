@@ -43,7 +43,6 @@ module.exports = ( function() {
 
     _data.items.map( function( _item ) {
 
-      console.log( _item );
       let onclick = function() {
         let path = _item.path + '/' + _item.name;
         path = path.replace( /\/{2,}/, '/' );
