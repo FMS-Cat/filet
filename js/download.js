@@ -5,6 +5,11 @@ module.exports = ( function() {
   let fs = require( 'fs' );
   let archiver = require( 'archiver' );
 
+  let sendFileOptions = {
+    dotfiles: 'allow',
+    root: './'
+  };
+
   let download = function( _req, _res ) {
 
     let path = _req.body.path;
@@ -31,14 +36,12 @@ module.exports = ( function() {
         let zip = archiver( 'zip' );
 
         out.on( 'close', function() {
-          fs.readFile( name, 'binary', function( _error, _file ) {
+          _res.sendFile( name, sendFileOptions, function( _error ) {
             if ( _error ) {
               _res.status( 500 ).send( 'something goes wrong' );
               console.error( _error );
               return;
             }
-
-            _res.send( new Buffer( _file, 'binary' ) );
             fs.unlink( name );
           } );
         } );
@@ -57,14 +60,12 @@ module.exports = ( function() {
         zip.finalize();
 
       } else {
-        fs.readFile( '.' + path, 'binary', function( _error, _file ) {
+        _res.sendFile( '.' + path, sendFileOptions, function( _error ) {
           if ( _error ) {
             _res.status( 500 ).send( 'something goes wrong' );
             console.error( _error );
             return;
           }
-
-          _res.send( new Buffer( _file, 'binary' ) );
         } );
       }
 
