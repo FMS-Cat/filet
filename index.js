@@ -16,6 +16,8 @@
   app.use( '/file', express.static( './' ) );
   app.use( '/static', express.static( __dirname + '/dist' ) );
 
+  require( './js/tempdir' );
+
   let port = process.env.PORT || 3000;
   app.listen( port );
   console.log( '🐟 < Hi, I am filet' );

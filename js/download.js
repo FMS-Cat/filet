@@ -3,19 +3,18 @@ module.exports = ( function() {
   'use strict';
 
   let fs = require( 'fs' );
-  let path = require( 'path' );
   let archiver = require( 'archiver' );
 
   let download = function( _req, _res ) {
 
-    let dirPath = _req.body.path;
-    if ( !dirPath ) {
+    let path = _req.body.path;
+    if ( !path ) {
       _res.status( 400 ).send( 'file path is required' );
       return;
     }
-    dirPath = dirPath.replace( /\.{2,}/, '.' );
+    path = path.replace( /\.{2,}/, '.' );
 
-    fs.stat( '.' + dirPath, function( _error, _stat ) {
+    fs.stat( '.' + path, function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
           _res.status( 404 ).send( 'no such file or directory' );
@@ -52,13 +51,13 @@ module.exports = ( function() {
         zip.pipe( out );
         zip.bulk( {
           'expand': true,
-          'cwd': '.' + dirPath,
+          'cwd': '.' + path,
           'src': [ '**' ]
         } );
         zip.finalize();
 
       } else {
-        fs.readFile( '.' + dirPath, 'binary', function( _error, _file ) {
+        fs.readFile( '.' + path, 'binary', function( _error, _file ) {
           if ( _error ) {
             _res.status( 500 ).send( 'something goes wrong' );
             console.error( _error );

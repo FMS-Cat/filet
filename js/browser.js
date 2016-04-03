@@ -3,7 +3,6 @@ module.exports = ( function() {
   'use strict';
 
   let fs = require( 'fs' );
-  let path = require( 'path' );
   let archiver = require( 'archiver' );
 
   let browser = function( _req, _res ) {

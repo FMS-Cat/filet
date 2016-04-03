@@ -8,8 +8,7 @@ module.exports = ( function() {
     post( {
       'url': location.href.replace( /\/browser.*/, '/unlink' ),
       'data': { 'path': _item.path + '/' + _item.name },
-      'responseType': 'blob',
-      'callback': function( _status, _data ) {
+      'callback': function( _status ) {
         if ( _status === 200 ) {
           if ( window.history.state.path === _item.path ) {
             browser( _item.path, true, true );
