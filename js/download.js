@@ -13,11 +13,9 @@ module.exports = ( function() {
       _res.status( 400 ).send( 'file path is required' );
       return;
     }
-    dirPath = dirPath.replace( /\/$/, '' );
-    dirPath = '.' + dirPath;
     dirPath = dirPath.replace( /\.{2,}/, '.' );
 
-    fs.stat( dirPath, function( _error, _stat ) {
+    fs.stat( '.' + dirPath, function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
           _res.status( 404 ).send( 'no such file or directory' );
@@ -29,7 +27,7 @@ module.exports = ( function() {
       }
 
       if ( _stat.isDirectory() ) {
-        let name = __dirname + '/temp/' + ( +new Date() ) + '.zip';
+        let name = __dirname + '/../temp/' + ( +new Date() ) + '.zip';
         let out = fs.createWriteStream( name );
         let zip = archiver( 'zip' );
 
@@ -54,13 +52,13 @@ module.exports = ( function() {
         zip.pipe( out );
         zip.bulk( {
           'expand': true,
-          'cwd': dirPath,
+          'cwd': '.' + dirPath,
           'src': [ '**' ]
         } );
         zip.finalize();
 
       } else {
-        fs.readFile( dirPath, 'binary', function( _error, _file ) {
+        fs.readFile( '.' + dirPath, 'binary', function( _error, _file ) {
           if ( _error ) {
             _res.status( 500 ).send( 'something goes wrong' );
             console.error( _error );

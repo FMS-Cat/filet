@@ -10,6 +10,7 @@
   app.post( '/list', upload.array(), require( './js/list' ) );
   app.post( '/property', upload.array(), require( './js/property' ) );
   app.post( '/download', upload.array(), require( './js/download' ) );
+  app.post( '/unlink', upload.array(), require( './js/unlink' ) );
   app.post( '/upload', upload.array( 'files' ), require( './js/upload' ) );
   app.use( '/browser', require( './js/browser' ) );
   app.use( '/file', express.static( './' ) );

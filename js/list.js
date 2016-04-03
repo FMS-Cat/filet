@@ -7,9 +7,11 @@ module.exports = ( function() {
 
   let list = function( _req, _res ) {
 
-    let dirPath = _req.body.path || '.';
-    dirPath = dirPath.replace( /\/$/, '' );
-    dirPath = '.' + dirPath;
+    let dirPath = _req.body.path;
+    if ( !dirPath ) {
+      _res.status( 400 ).send( 'file path is required' );
+      return;
+    }
     dirPath = dirPath.replace( /\.{2,}/, '.' );
 
     let ret = {};
@@ -17,7 +19,7 @@ module.exports = ( function() {
 
     ret.path = dirPath;
 
-    fs.readdir( dirPath, function( _error, _files ) {
+    fs.readdir( '.' + dirPath, function( _error, _files ) {
       if ( _error ) {
         _res.status( 500 ).send( 'something goes wrong' );
         console.error( _error );
@@ -26,7 +28,7 @@ module.exports = ( function() {
 
       _files.map( function( _file ) {
         let filePath = path.join( dirPath, _file );
-        let fileStat = fs.statSync( filePath );
+        let fileStat = fs.statSync( '.' + filePath );
 
         let dir = 0;
         if ( fileStat.isDirectory() ) {

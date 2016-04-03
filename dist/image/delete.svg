@@ -1,0 +1,44 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 100 100"
+  width="256"
+  height="256"
+  font-family="Helvetica Neue"
+  font-weight="300"
+>
+  <path fill="#000" d="
+    M 30 0
+    l 0 10
+    l -20 0
+    l 0 10
+    l 80 0
+    l 0 -10
+    l -20 0
+    l 0 -10
+    z
+
+    M 15 25
+    l 0 75
+    l 70 0
+    l 0 -75
+    z
+
+    M 25 35
+    l 10 0
+    l 0 55
+    l -10 0
+    z
+
+    M 45 35
+    l 10 0
+    l 0 55
+    l -10 0
+    z
+
+    M 65 35
+    l 10 0
+    l 0 55
+    l -10 0
+    z
+  " />
+</svg>

@@ -7,14 +7,16 @@ module.exports = ( function() {
 
   let property = function( _req, _res ) {
 
-    let path = _req.body.path || '.';
-    path = path.replace( /\/$/, '' );
-    path = '.' + path;
+    let path = _req.body.path;
+    if ( !dirPath ) {
+      _res.status( 400 ).send( 'file path is required' );
+      return;
+    }
     path = path.replace( /\.{2,}/, '.' );
 
     let ret = {};
 
-    fs.stat( path, function( _error, _stat ) {
+    fs.stat( '.' + path, function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
           _res.status( 404 ).send( 'no such file or directory' );

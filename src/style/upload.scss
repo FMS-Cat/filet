@@ -48,11 +48,11 @@
     @include keyframes( $ani ) {
       0% {
         opacity: 0.0;
-        transform: scale( 0.9 );
+        transform: scale( 0.9 ) rotate( 10deg );
       }
       100% {
         opacity: 0.8;
-        transform: scale( 1.0 );
+        transform: scale( 1.0 ) rotate( 0deg );
       }
     }
     @include animation( $ani 0.1s ease );

@@ -9,11 +9,19 @@ module.exports = ( function() {
 
   let browser = function( _path, _isDir, _dontPush ) {
     if ( !_dontPush ) {
-      window.history.pushState(
-        { path: _path, isDir: _isDir },
-        null,
-        location.href.replace( /\/browser.*/, '/browser' ) + _path
-      );
+      if ( !window.history.state ) {
+        window.history.replaceState(
+          { path: _path, isDir: _isDir },
+          null,
+          location.href.replace( /\/browser.*/, '/browser' ) + _path
+        );
+      } else if ( window.history.state.path !== _path ) {
+        window.history.pushState(
+          { path: _path, isDir: _isDir },
+          null,
+          location.href.replace( /\/browser.*/, '/browser' ) + _path
+        );
+      }
     }
 
     if ( _isDir ) {

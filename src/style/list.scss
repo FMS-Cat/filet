@@ -36,6 +36,20 @@
         text-overflow: ellipsis;
       }
 
+      .button {
+        width: 1.2em;
+        height: 1.2em;
+        position: absolute;
+
+        &.download {
+          left: 530px;
+        }
+
+        &.delete {
+          left: 560px;
+        }
+      }
+
       .date {
         position: absolute;
         left: 300px;

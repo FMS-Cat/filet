@@ -20,14 +20,11 @@
     z
   " />
 
-  <path id="arrow" fill="#000" d="
-    M 60 67
-    l 0 -15
-    l 10 0
-    l -20 -20
+  <path id="arrow" fill="none" stroke="#000" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" d="
+    M 50 80
+    l 0 -40
+    l 20 20
+    m -20 -20
     l -20 20
-    l 10 0
-    l 0 15
-    z
   " />
 </svg>

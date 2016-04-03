@@ -7,6 +7,9 @@ module.exports = ( function() {
   let DnD = require( './dnd' );
   let dnd;
   let post = require( './post' );
+  let download = require( './download' );
+  let unlink = require( './unlink' );
+  let upload = require( './upload' );
 
   let list = function( _data ) {
     while ( container.firstChild ) {
@@ -68,9 +71,9 @@ module.exports = ( function() {
       } );
 
       let name = el( {
-        tag: 'a',
+        tag: 'span',
         parent: item,
-        class: 'filename',
+        class: [ 'filename', 'hover' ],
         onclick: onclick,
         innerText: _item.name
       } );
@@ -81,6 +84,32 @@ module.exports = ( function() {
         parent: item,
         class: 'date',
         innerText: date.toLocaleString()
+      } );
+
+      // ---
+
+      let buttonDownload = el( {
+        tag: 'img',
+        parent: item,
+        src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
+        class: [ 'button', 'download', 'hover' ],
+        onclick: function() {
+          download( _item );
+        }
+      } );
+
+      // ---
+
+      let buttonDelete = el( {
+        tag: 'img',
+        parent: item,
+        src: location.href.replace( /\/browser.*/, '/static/image/delete.svg' ),
+        class: [ 'button', 'delete', 'hover' ],
+        onclick: function() {
+          if ( confirm( 'delete ' + _item.name + '?' ) ) {
+            unlink( _item );
+          }
+        }
       } );
 
     } );
@@ -121,14 +150,7 @@ module.exports = ( function() {
         uploadBg.classList.add( 'off' );
         uploadIcon.classList.remove( 'on' );
         uploadIcon.classList.add( 'drop' );
-
-        post( {
-          url: location.href.replace( /\/browser.*/, '/upload' ),
-          data: {
-            path: _data.path,
-            files: _event.dataTransfer.files
-          }
-        } );
+        upload( _data.path, _event.dataTransfer.files );
       },
     } );
 
