@@ -31,18 +31,18 @@ module.exports = ( function() {
       }
 
       if ( _stat.isDirectory() ) {
-        let name = pathlib.join( __dirname, '../temp', ( +new Date() ) + '.zip' );
-        let out = fs.createWriteStream( name );
+        let zipPath = pathlib.join( __dirname, '../temp', ( +new Date() ) + '.zip' );
+        let out = fs.createWriteStream( zipPath );
         let zip = archiver( 'zip' );
 
         out.on( 'close', function() {
-          _res.sendFile( name, sendFileOptions, function( _error ) {
+          _res.sendFile( zipPath, sendFileOptions, function( _error ) {
             if ( _error ) {
               _res.status( 500 ).send( 'something goes wrong' );
               console.error( _error );
               return;
             }
-            fs.unlink( name );
+            fs.unlink( zipPath );
           } );
         } );
 
@@ -52,12 +52,54 @@ module.exports = ( function() {
         } );
 
         zip.pipe( out );
-        zip.bulk( {
-          'expand': true,
-          'cwd': pathlib.join( process.cwd(), path ),
-          'src': [ '**' ]
+
+        let addRecursive = function( _path, _callback ) {
+          if ( _path === zipPath ) {
+            if ( typeof _callback === 'function' ) { _callback(); }
+            return;
+          }
+
+          fs.stat( _path, function( _error, _stat ) {
+            if ( _error ) {
+              _res.status( 500 ).send( 'something goes wrong' );
+              console.error( _error );
+              return;
+            }
+
+            if ( _stat.isDirectory() ) {
+              fs.readdir( _path, function( _error, _files ) {
+                if ( _error ) {
+                  _res.status( 500 ).send( 'something goes wrong' );
+                  console.error( _error );
+                  return;
+                }
+
+                let done = function() {
+                  if ( _files.length === 0 ) {
+                    if ( typeof _callback === 'function' ) { _callback(); }
+                  } else {
+                    let file = _files.shift();
+                    addRecursive(
+                      pathlib.join( _path, file ),
+                      function() { done(); }
+                    );
+                  }
+                };
+                done();
+              } );
+            } else {
+              zip.append(
+                fs.createReadStream( _path ),
+                { name: pathlib.relative( pathlib.join( process.cwd(), path ), _path ) }
+              );
+              if ( typeof _callback === 'function' ) { _callback(); }
+            }
+          } );
+        };
+
+        addRecursive( pathlib.join( process.cwd(), path ), function() {
+          zip.finalize();
         } );
-        zip.finalize();
 
       } else {
         _res.sendFile( pathlib.join( process.cwd(), path ), sendFileOptions, function( _error ) {

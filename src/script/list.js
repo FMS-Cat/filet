@@ -35,6 +35,24 @@ module.exports = ( function() {
 
     // ---
 
+    let buttons = el( {
+      tag: 'div',
+      parent: list,
+      id: 'buttons'
+    } );
+
+    el( {
+      tag: 'img',
+      parent: buttons,
+      src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
+      class: [ 'button', 'hover', 'download' ],
+      onclick: function() {
+        download( _data.path, true );
+      }
+    } );
+
+    // ---
+
     let items = el( {
       tag: 'div',
       parent: list,
@@ -57,7 +75,7 @@ module.exports = ( function() {
         class: 'item'
       } );
 
-      let icon = el( {
+      el( {
         tag: 'img',
         parent: item,
         class: 'icon',
@@ -71,7 +89,7 @@ module.exports = ( function() {
         } )()
       } );
 
-      let name = el( {
+      el( {
         tag: 'span',
         parent: item,
         class: [ 'filename', 'hover' ],
@@ -79,29 +97,24 @@ module.exports = ( function() {
         innerText: _item.name
       } );
 
-      let date = new Date( _item.stats.birthtime );
-      let dateSpan = el( {
+      el( {
         tag: 'span',
         parent: item,
         class: 'date',
-        innerText: date.toLocaleString()
+        innerText: new Date( _item.stats.birthtime ).toLocaleString()
       } );
 
-      // ---
-
-      let buttonDownload = el( {
+      el( {
         tag: 'img',
         parent: item,
         src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
         class: [ 'button', 'download', 'hover' ],
         onclick: function() {
-          download( _item );
+          download( _item.path + '/' + _item.name, !!_item.dir );
         }
       } );
 
-      // ---
-
-      let buttonDelete = el( {
+      el( {
         tag: 'img',
         parent: item,
         src: location.href.replace( /\/browser.*/, '/static/image/delete.svg' ),
@@ -117,13 +130,13 @@ module.exports = ( function() {
 
     // ---
 
-    let uploadBg = el( {
+    el( {
       tag: 'div',
       parent: container,
       class: 'uploadBg'
     } );
 
-    let uploadIcon = el( {
+    el( {
       tag: 'img',
       parent: container,
       class: 'uploadIcon',

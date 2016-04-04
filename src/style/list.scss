@@ -8,14 +8,21 @@
     margin: 1em 0;
   }
 
+  #buttons {
+    .button {
+      width: 2.0em;
+      height: 2.0em;
+    }
+  }
+
   #items {
     width: 100%;
 
     .item {
       position: relative;
-      width: calc( 100% - 80px );
+      width: 100%;
       height: 1em;
-      padding: 0.8em 40px;
+      padding: 0.8em 0;
 
       border-bottom: 1px solid #ddd;
 

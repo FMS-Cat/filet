@@ -26,8 +26,8 @@ module.exports = ( function() {
       if ( _error ) {
         console.error( _error );
       }
+      process.exit();
     } );
-    process.exit();
   };
 
   process.on( 'exit', onexit );
