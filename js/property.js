@@ -3,6 +3,7 @@ module.exports = ( function() {
   'use strict';
 
   let fs = require( 'fs' );
+  let pathlib = require( 'path' );
 
   let property = function( _req, _res ) {
 
@@ -15,7 +16,7 @@ module.exports = ( function() {
 
     let ret = {};
 
-    fs.stat( '.' + path, function( _error, _stat ) {
+    fs.stat( pathlib.join( process.cwd(), path ), function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
           _res.status( 404 ).send( 'no such file or directory' );

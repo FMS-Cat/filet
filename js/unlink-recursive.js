@@ -3,6 +3,7 @@ module.exports = ( function() {
   'use strict';
 
   let fs = require( 'fs' );
+  let pathlib = require( 'path' );
 
   let unlinkRecursive = function( _path, _callback ) {
     let callback = _callback || function() {};
@@ -39,7 +40,7 @@ module.exports = ( function() {
               } );
             } else {
               let item = _items.shift();
-              unlinkRecursive( _path + '/' + item, done );
+              unlinkRecursive( pathlib.join( _path, item ), done );
             }
           };
           done();

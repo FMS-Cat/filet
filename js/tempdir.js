@@ -3,9 +3,10 @@ module.exports = ( function() {
   'use strict';
 
   let fs = require( 'fs' );
+  let pathlib = require( 'path' );
   let unlinkRecursive = require( './unlink-recursive' );
 
-  let path = __dirname + '/../temp/';
+  let path = pathlib.join( __dirname, '/../temp/' );
 
   fs.stat( path, function( _error ) {
     let notfound = false;

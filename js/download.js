@@ -3,11 +3,11 @@ module.exports = ( function() {
   'use strict';
 
   let fs = require( 'fs' );
+  let pathlib = require( 'path' );
   let archiver = require( 'archiver' );
 
   let sendFileOptions = {
-    dotfiles: 'allow',
-    root: './'
+    dotfiles: 'allow'
   };
 
   let download = function( _req, _res ) {
@@ -19,7 +19,7 @@ module.exports = ( function() {
     }
     path = path.replace( /\.{2,}/, '.' );
 
-    fs.stat( '.' + path, function( _error, _stat ) {
+    fs.stat( pathlib.join( process.cwd(), path ), function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
           _res.status( 404 ).send( 'no such file or directory' );
@@ -31,7 +31,7 @@ module.exports = ( function() {
       }
 
       if ( _stat.isDirectory() ) {
-        let name = __dirname + '/../temp/' + ( +new Date() ) + '.zip';
+        let name = pathlib.join( __dirname, '../temp', ( +new Date() ) + '.zip' );
         let out = fs.createWriteStream( name );
         let zip = archiver( 'zip' );
 
@@ -54,13 +54,13 @@ module.exports = ( function() {
         zip.pipe( out );
         zip.bulk( {
           'expand': true,
-          'cwd': '.' + path,
+          'cwd': pathlib.join( process.cwd(), path ),
           'src': [ '**' ]
         } );
         zip.finalize();
 
       } else {
-        _res.sendFile( '.' + path, sendFileOptions, function( _error ) {
+        _res.sendFile( pathlib.join( process.cwd(), path ), sendFileOptions, function( _error ) {
           if ( _error ) {
             _res.status( 500 ).send( 'something goes wrong' );
             console.error( _error );

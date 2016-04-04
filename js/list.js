@@ -3,7 +3,7 @@ module.exports = ( function() {
   'use strict';
 
   let fs = require( 'fs' );
-  let path = require( 'path' );
+  let pathlib = require( 'path' );
 
   let list = function( _req, _res ) {
 
@@ -19,7 +19,7 @@ module.exports = ( function() {
 
     ret.path = dirPath;
 
-    fs.readdir( '.' + dirPath, function( _error, _files ) {
+    fs.readdir( pathlib.join( process.cwd(), dirPath ), function( _error, _files ) {
       if ( _error ) {
         _res.status( 500 ).send( 'something goes wrong' );
         console.error( _error );
@@ -27,8 +27,8 @@ module.exports = ( function() {
       }
 
       _files.map( function( _file ) {
-        let filePath = path.join( dirPath, _file );
-        let fileStat = fs.statSync( '.' + filePath );
+        let filePath = pathlib.join( dirPath, _file );
+        let fileStat = fs.statSync( pathlib.join( process.cwd(), filePath ) );
 
         let dir = 0;
         if ( fileStat.isDirectory() ) {
@@ -36,7 +36,7 @@ module.exports = ( function() {
         }
 
         ret.items.push( {
-          name: path.basename( filePath ),
+          name: pathlib.basename( filePath ),
           path: dirPath,
           dir: dir,
           stats: fileStat
