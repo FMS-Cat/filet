@@ -1,10 +1,17 @@
 @import 'animation';
 
-body {
+html, body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  height: 100%;
 
   font: 500 16px "Helvetica Neue", "ヒラギノ角ゴ ProN", sans-serif;
+}
+
+#container {
+  width: 100%;
+  height: 100%;
 }
 
 @import 'hover';
