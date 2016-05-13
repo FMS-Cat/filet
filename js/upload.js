@@ -12,14 +12,18 @@ module.exports = ( function() {
       _res.status( 400 ).send( 'file path is required' );
       return;
     }
-    path = path.replace( /\.{2,}/, '.' );
+    path = pathlib.join( process.cwd(), path );
+    if ( /^\.\.\//.test( pathlib.relative( process.cwd(), path ) ) ) {
+      _res.status( 400 ).send( 'invalid path' );
+      return;
+    }
 
-    fs.stat( pathlib.join( process.cwd(), path ), function( _error, _stat ) {
+    fs.stat( path, function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
           _res.status( 404 ).send( 'no such directory' );
         } else {
-          _res.status( 500 ).send( 'something goes wrong' );
+          _res.status( 500 ).send( 'something went wrong' );
           console.error( _error );
         }
         return;
@@ -40,9 +44,9 @@ module.exports = ( function() {
         let name = file.originalname;
         let buffer = file.buffer;
 
-        fs.writeFile( pathlib.join( process.cwd(), path, name ), buffer, function( _error ) {
+        fs.writeFile( pathlib.join( path, name ), buffer, function( _error ) {
           if ( _error ) {
-            _res.status( 500 ).send( 'something goes wrong' );
+            _res.status( 500 ).send( 'something went wrong' );
             console.error( _error );
             return;
           }

@@ -7,27 +7,27 @@ module.exports = ( function() {
 
   let list = function( _req, _res ) {
 
-    let dirPath = _req.body.path;
-    if ( !dirPath ) {
-      _res.status( 400 ).send( 'file path is required' );
+    let pathO = decodeURI( _req.url.replace( /\/list(.*)/, '$1' ) );
+    let path = pathlib.join( process.cwd(), pathO );
+    if ( /^\.\.\//.test( pathlib.relative( process.cwd(), path ) ) ) {
+      _res.status( 400 ).send( 'invalid path' );
       return;
     }
-    dirPath = dirPath.replace( /\.{2,}/, '.' );
 
     let ret = {};
     ret.items = [];
 
-    ret.path = dirPath;
+    ret.path = pathO;
 
-    fs.readdir( pathlib.join( process.cwd(), dirPath ), function( _error, _files ) {
+    fs.readdir( path, function( _error, _files ) {
       if ( _error ) {
-        _res.status( 500 ).send( 'something goes wrong' );
+        _res.status( 500 ).send( 'something went wrong' );
         console.error( _error );
         return;
       }
 
       _files.map( function( _file ) {
-        let filePath = pathlib.join( dirPath, _file );
+        let filePath = pathlib.join( pathO, _file );
         let fileStat = fs.statSync( pathlib.join( process.cwd(), filePath ) );
 
         let dir = 0;
@@ -37,7 +37,7 @@ module.exports = ( function() {
 
         ret.items.push( {
           name: pathlib.basename( filePath ),
-          path: dirPath,
+          path: pathO,
           dir: dir,
           stats: fileStat
         } );

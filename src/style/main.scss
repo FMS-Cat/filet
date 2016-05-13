@@ -1,4 +1,5 @@
 @import 'animation';
+@import 'filter';
 
 html, body {
   margin: 0;
@@ -16,6 +17,7 @@ html, body {
 
 @import 'hover';
 
+@import 'head';
 @import 'list';
-
+@import 'preview';
 @import 'upload';

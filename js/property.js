@@ -7,27 +7,39 @@ module.exports = ( function() {
 
   let property = function( _req, _res ) {
 
-    let path = _req.body.path;
-    if ( !path ) {
-      _res.status( 400 ).send( 'file path is required' );
+    let pathO = decodeURI( _req.url.replace( /\/property(.*)/, '$1' ) );
+    let path = pathlib.join( process.cwd(), pathO );
+    if ( /^\.\.\//.test( pathlib.relative( process.cwd(), path ) ) ) {
+      _res.status( 400 ).send( 'invalid path' );
       return;
     }
-    path = path.replace( /\.{2,}/, '.' );
 
     let ret = {};
 
-    fs.stat( pathlib.join( process.cwd(), path ), function( _error, _stat ) {
+    fs.stat( path, function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
           _res.status( 404 ).send( 'no such file or directory' );
         } else {
-          _res.status( 500 ).send( 'something goes wrong' );
+          _res.status( 500 ).send( 'something went wrong' );
           console.error( _error );
         }
         return;
       }
 
-      _res.send( JSON.stringify( _stat ) );
+      let dir = 0;
+      if ( _stat.isDirectory() ) {
+        dir = 1;
+      }
+
+      let ret = {
+        name: pathlib.basename( pathO ),
+        path: pathO,
+        dir: dir,
+        stats: _stat
+      };
+
+      _res.send( JSON.stringify( ret ) );
     } );
 
   };

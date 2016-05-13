@@ -1,0 +1,32 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 100 100"
+  width="256"
+  height="256"
+  font-family="Helvetica Neue"
+  font-weight="300"
+>
+  <path id="arrow" fill="#000" opacity="1.0" d="
+    M 50 70
+    l 40 -40
+    l -10 -10
+    l -23 23
+    l 0 -43
+    l -14 0
+    l 0 43
+    l -23 -23
+    l -10 10
+  " />
+
+  <path id="tray" fill="#000" d="
+    M 5 100
+    l 90 0
+    l 0 -34
+    l -14 0
+    l 0 20
+    l -62 0
+    l 0 -20
+    l -14 0
+    z
+  " />
+</svg>

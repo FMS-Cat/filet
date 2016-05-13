@@ -23,6 +23,13 @@ module.exports = ( function() {
     }
     delete _props.class;
 
+    if ( _props.style ) {
+      for ( let attr in _props.style ) {
+        element.style[ attr ] = _props.style[ attr ];
+      }
+    }
+    delete _props.style;
+
     for ( let key in _props ) {
       element[ key ] = _props[ key ];
     }

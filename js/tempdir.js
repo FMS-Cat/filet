@@ -4,7 +4,7 @@ module.exports = ( function() {
 
   let fs = require( 'fs' );
   let pathlib = require( 'path' );
-  let unlinkRecursive = require( './unlink-recursive' );
+  let recursiveUnlink = require( './recursive-unlink' );
 
   let path = pathlib.join( __dirname, '/../temp/' );
 
@@ -22,7 +22,7 @@ module.exports = ( function() {
   } );
 
   let onexit = function() {
-    unlinkRecursive( path, function( _error ) {
+    recursiveUnlink( path, function( _error ) {
       if ( _error ) {
         console.error( _error );
       }

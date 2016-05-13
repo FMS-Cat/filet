@@ -4,7 +4,7 @@ module.exports = ( function() {
 
   let fs = require( 'fs' );
   let pathlib = require( 'path' );
-  let unlinkRecursive = require( './unlink-recursive' );
+  let recursiveUnlink = require( './recursive-unlink' );
 
   let unlink = function( _req, _res ) {
 
@@ -13,26 +13,30 @@ module.exports = ( function() {
       _res.status( 400 ).send( 'file path is required' );
       return;
     }
-    path = path.replace( /\.{2,}/, '.' );
+    path = pathlib.join( process.cwd(), path );
+    if ( /^\.\.\//.test( pathlib.relative( process.cwd(), path ) ) ) {
+      _res.status( 400 ).send( 'invalid path' );
+      return;
+    }
 
-    fs.stat( pathlib.join( process.cwd(), path ), function( _error, _stat ) {
+    fs.stat( path, function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
-          _res.status( 404 ).send( 'no such file or directory' );
+          _res.status( 400 ).send( 'no such file or directory' );
         } else {
-          _res.status( 500 ).send( 'something goes wrong' );
+          _res.status( 500 ).send( 'something went wrong' );
           console.error( _error );
         }
         return;
       }
 
-      unlinkRecursive( pathlib.join( process.cwd(), path ), function( _error ) {
+      recursiveUnlink( path, function( _error ) {
         if ( _error ) {
-          _res.status( 500 ).send( 'something goes wrong' );
+          _res.status( 500 ).send( 'something went wrong' );
           console.error( _error );
           return;
         }
-        _res.status( 200 ).send( 'done' );
+        _res.status( 200 ).send();
       } );
 
     } );

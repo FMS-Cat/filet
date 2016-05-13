@@ -1,0 +1,4 @@
+@mixin filter( $filt ) {
+  -webkit-filter: $filt;
+  filter: $filt;
+}

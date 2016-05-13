@@ -1,58 +1,82 @@
-module.exports = ( function() {
+'use strict';
 
-  'use strict';
+let get = require( './get' );
 
-  let post = require( './post' );
+let path;
+let isDir;
+let list = require( './list' );
+let preview = require( './preview' );
 
-  let list = require( './list' );
-  let property = require( './property' );
-
-  let browser = function( _path, _isDir, _dontPush ) {
-    if ( !_dontPush ) {
-      if ( !window.history.state ) {
-        window.history.replaceState(
-          { path: _path, isDir: _isDir },
-          null,
-          location.href.replace( /\/browser.*/, '/browser' ) + _path
-        );
-      } else if ( window.history.state.path !== _path ) {
-        window.history.pushState(
-          { path: _path, isDir: _isDir },
-          null,
-          location.href.replace( /\/browser.*/, '/browser' ) + _path
-        );
+let loadList = function( _path, _elList ) {
+  get( {
+    'url': location.href.replace( /\/browser.*/, '/list' + _path ),
+    'responseType': 'text',
+    'callback': function( _status, _data ) {
+      if ( _status === 200 ) {
+        if ( _elList ) {
+          container.removeChild( _elList );
+        }
+        list( JSON.parse( _data ) );
       }
     }
-
-    if ( _isDir ) {
-      post( {
-        'url': location.href.replace( /\/browser.*/, '/list' ),
-        'data': { 'path': _path },
-        'responseType': 'text',
-        'callback': function( _status, _data ) {
-          if ( _status === 200 ) {
-            list( JSON.parse( _data ) );
-          }
-        }
-      } );
-    } else {
-      post( {
-        'url': location.href.replace( /\/browser.*/, '/property' ),
-        'data': { 'path': _path },
-        'responseType': 'text',
-        'callback': function( _status, _data ) {
-          if ( _status === 200 ) {
-            property( JSON.parse( _data ) );
-          }
-        }
-      } );
-    }
-  };
-
-  window.addEventListener( 'popstate', function( _event ) {
-    browser( _event.state.path, _event.state.isDir, true );
   } );
+};
 
-  return browser;
+let loadPreview = function( _path ) {
+  get( {
+    'url': location.href.replace( /\/browser.*/, '/property' + _path ),
+    'responseType': 'text',
+    'callback': function( _status, _data ) {
+      if ( _status === 200 ) {
+        preview( JSON.parse( _data ) );
+      }
+    }
+  } );
+};
 
-} )();
+let browser = function( _path, _isDir, _dontPush ) {
+  let nDir = _isDir ? _path : _path.replace( /\/[^/]*$/, '/' );
+  let pDir = path ? ( isDir ? path : path.replace( /\/[^/]*$/, '/' ) ) : '';
+
+  path = _path || path;
+  isDir = _isDir;
+
+  if ( !_dontPush ) {
+    if ( !window.history.state ) {
+      window.history.replaceState(
+        { path: path, isDir: _isDir },
+        null,
+        location.href.replace( /\/browser.*/, '/browser' ) + path
+      );
+    } else if ( window.history.state.path !== path ) {
+      window.history.pushState(
+        { path: path, isDir: _isDir },
+        null,
+        location.href.replace( /\/browser.*/, '/browser' ) + path
+      );
+    }
+  }
+
+  let elList = document.getElementById( 'list' );
+  if ( elList ) {
+    if ( nDir !== pDir ) {
+      loadList( nDir, elList );
+    }
+  } else {
+    loadList( nDir );
+  }
+
+  let elPreview = document.getElementById( 'preview' );
+  if ( elPreview ) {
+    container.removeChild( elPreview );
+  }
+  if ( !_isDir ) {
+    loadPreview( path );
+  }
+};
+
+window.addEventListener( 'popstate', function( _event ) {
+  browser( _event.state.path, _event.state.isDir, true );
+} );
+
+module.exports = browser;

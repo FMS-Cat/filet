@@ -6,57 +6,20 @@ module.exports = ( function() {
   let selectIcon = require( './select-icon' );
   let DnD = require( './dnd' );
   let dnd;
+  let byteformat = require( './byteformat' );
+
   let post = require( './post' );
   let download = require( './download' );
+  let rename = require( './rename' );
+  let mkdir = require( './mkdir' );
   let unlink = require( './unlink' );
   let upload = require( './upload' );
 
   let list = function( _data ) {
-    while ( container.firstChild ) {
-      container.removeChild( container.firstChild );
-    }
-
-    // ---
-
     let list = el( {
       tag: 'div',
       parent: container,
       id: 'list'
-    } );
-
-    // ---
-
-    let current = el( {
-      tag: 'div',
-      parent: list,
-      id: 'current',
-      innerText: _data.path
-    } );
-
-    // ---
-
-    let buttons = el( {
-      tag: 'div',
-      parent: list,
-      id: 'buttons'
-    } );
-
-    el( {
-      tag: 'img',
-      parent: buttons,
-      src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
-      class: [ 'button', 'hover', 'download' ],
-      onclick: function() {
-        download( _data.path, true );
-      }
-    } );
-
-    // ---
-
-    let items = el( {
-      tag: 'div',
-      parent: list,
-      id: 'items'
     } );
 
     _data.items.map( function( _item ) {
@@ -71,7 +34,7 @@ module.exports = ( function() {
 
       let item = el( {
         tag: 'div',
-        parent: items,
+        parent: list,
         class: 'item'
       } );
 
@@ -101,12 +64,27 @@ module.exports = ( function() {
         tag: 'span',
         parent: item,
         class: 'date',
-        innerText: new Date( _item.stats.birthtime ).toLocaleString()
+        innerText: new Date( _item.stats.mtime ).toLocaleString()
+      } );
+
+      if ( !_item.dir ) {
+        el( {
+          tag: 'span',
+          parent: item,
+          class: 'size',
+          innerText: byteformat( _item.stats.size )
+        } );
+      }
+
+      let itemButtons = el( {
+        tag: 'div',
+        parent: item,
+        class: 'buttons'
       } );
 
       el( {
         tag: 'img',
-        parent: item,
+        parent: itemButtons,
         src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
         class: [ 'button', 'download', 'hover' ],
         onclick: function() {
@@ -116,12 +94,25 @@ module.exports = ( function() {
 
       el( {
         tag: 'img',
-        parent: item,
+        parent: itemButtons,
+        src: location.href.replace( /\/browser.*/, '/static/image/rename.svg' ),
+        class: [ 'button', 'rename', 'hover' ],
+        onclick: function() {
+          let name = prompt( 'new name', _item.name );
+          if ( name ) {
+            rename( _item.path + '/' + _item.name, name );
+          }
+        }
+      } );
+
+      el( {
+        tag: 'img',
+        parent: itemButtons,
         src: location.href.replace( /\/browser.*/, '/static/image/delete.svg' ),
         class: [ 'button', 'delete', 'hover' ],
         onclick: function() {
           if ( confirm( 'delete ' + _item.name + '?' ) ) {
-            unlink( _item );
+            unlink( _item.path + '/' + _item.name );
           }
         }
       } );
@@ -130,22 +121,66 @@ module.exports = ( function() {
 
     // ---
 
-    el( {
+    let head = el( {
       tag: 'div',
-      parent: container,
-      class: 'uploadBg'
+      parent: list,
+      id: 'head'
+    } );
+
+    let current = el( {
+      tag: 'div',
+      parent: head,
+      id: 'current',
+      innerText: _data.path
+    } );
+
+    let headButtons = el( {
+      tag: 'div',
+      parent: head,
+      class: 'buttons'
     } );
 
     el( {
       tag: 'img',
-      parent: container,
-      class: 'uploadIcon',
+      parent: headButtons,
+      src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
+      class: [ 'button', 'hover', 'download' ],
+      onclick: function() {
+        download( _data.path, true );
+      }
+    } );
+
+    el( {
+      tag: 'img',
+      parent: headButtons,
+      src: location.href.replace( /\/browser.*/, '/static/image/mkdir.svg' ),
+      class: [ 'button', 'hover', 'mkdir' ],
+      onclick: function() {
+        let name = prompt( 'folder name', 'New Folder' );
+        if ( name ) {
+          mkdir( _data.path, name );
+        }
+      }
+    } );
+
+    // ---
+
+    let uploadBg = el( {
+      tag: 'div',
+      parent: list,
+      id: 'uploadBg'
+    } );
+
+    let uploadIcon = el( {
+      tag: 'img',
+      parent: list,
+      id: 'uploadIcon',
       src: location.href.replace( /\/browser.*/, '/static/image/upload.svg' )
     } );
 
     if ( typeof dnd === 'function' ) { dnd(); }
     dnd = DnD( {
-      element: container,
+      element: list,
       enter: function() {
         uploadBg.classList.add( 'on' );
         uploadBg.classList.remove( 'off' );

@@ -1,137 +1,153 @@
-( function() {
+'use strict';
 
-  'use strict';
+let gulp = require( 'gulp' );
 
-  let gulp = require( 'gulp' );
+let recursiveUnlink = require( './js/recursive-unlink' );
 
-  let fs = require( 'fs' );
+let browserify = require( 'browserify' );
+let watchify = require( 'watchify' );
+let babelify = require( 'babelify' );
+let sass = require( 'gulp-sass' );
+let source = require( 'vinyl-source-stream' );
 
-  let browserify = require( 'browserify' );
-  let watchify = require( 'watchify' );
-  let babelify = require( 'babelify' );
-  let sass = require( 'gulp-sass' );
-  let source = require( 'vinyl-source-stream' );
+let browserSync = require( 'browser-sync' );
 
-  let browserSync = require( 'browser-sync' );
+let server = require( 'gulp-develop-server' );
 
-  let server = require( 'gulp-develop-server' );
+// ---
 
-  // ---
+gulp.task( 'static-build',function() {
+  gulp.src( [ './src/static/**/*' ] )
+  .pipe( gulp.dest( './dist' ) );
+} );
 
-  gulp.task( 'style-build', function() {
-    return gulp.src( './src/style/main.scss' )
-    .pipe( sass().on( 'error', sass.logError ) )
-    .pipe( gulp.dest( './dist' ) )
-    .pipe( browserSync.stream() )
-  } );
+gulp.task( 'static-watch', function() {
+  gulp.watch( './src/static/**/*', [ 'static-build' ] );
+} );
 
-  gulp.task( 'style-watch', function() {
-    gulp.watch( './src/style/**', [ 'style-build' ] );
-  } );
+// ---
 
-  // ---
+gulp.task( 'style-build', function() {
+  return gulp.src( './src/style/main.scss' )
+  .pipe( sass().on( 'error', sass.logError ) )
+  .pipe( gulp.dest( './dist' ) )
+  .pipe( browserSync.stream() )
+} );
 
-  let brwsrfy = watchify( browserify( {
-    'cache': {},
-    'packageCache': {},
-    'fullPaths': true,
-    'entries': [ './src/script/main.js' ],
-  } ) );
+gulp.task( 'style-watch', function() {
+  gulp.watch( './src/style/**', [ 'style-build' ] );
+} );
 
-  let bundle = function() {
+// ---
+
+let brwsrfy = browserify( {
+  'cache': {},
+  'packageCache': {},
+  'fullPaths': true,
+  'entries': [ './src/script/main.js' ],
+  'transform': [
+    [ babelify, {
+      presets: 'es2015'
+    } ]
+  ]
+} );
+
+gulp.task( 'script-build', function() {
+  brwsrfy.bundle()
+  .on( 'error', function( _error ) {
+    console.error( _error );
+    this.emit( 'end' );
+  } )
+  .pipe( source( 'main.js' ) )
+  .pipe( gulp.dest( './dist' ) );
+} );
+
+gulp.task( 'script-watch', function() {
+  let wtcfy = watchify( brwsrfy );
+
+  wtcfy.on( 'update', function() {
     console.log( '🔮 Browserify!' );
-    brwsrfy.bundle()
+    wtcfy.bundle()
     .on( 'error', function( _error ) {
       console.error( _error );
       this.emit( 'end' );
     } )
     .pipe( source( 'main.js' ) )
     .pipe( gulp.dest( './dist' ) );
-  };
+  } );
 
-  brwsrfy.on( 'log', function( _log ) {
+  wtcfy.on( 'log', function( _log ) {
     console.log( '🍕 ' + _log );
   } );
+} );
 
-  gulp.task( 'script-build', function() {
-    bundle();
+// ---
+
+gulp.task( 'browser-init', function() {
+  browserSync.init( {
+    proxy: 'localhost:' + ( process.env.PORT || 3030 )
   } );
+} );
 
-  gulp.task( 'script-watch', function() {
-    brwsrfy.on( 'update', function() {
-      bundle();
-    } );
-  } );
+gulp.task( 'browser-reload', function() {
+  browserSync.reload();
+} );
 
-  // ---
+gulp.task( 'browser-watch', function() {
+  gulp.watch( [ './dist/**', '!./dist/**/*.css' ], [ 'browser-reload' ] );
+} );
 
-  gulp.task( 'html-copy', function() {
-    gulp.src( './src/*.html' )
-    .pipe( gulp.dest( 'dist' ) );
-  } );
+// ---
 
-  gulp.task( 'html-watch', function() {
-    gulp.watch( [ './src/*.html' ], [ 'html-copy' ] );
-  } );
+gulp.task( 'node-start', function() {
+  server.listen( { path: './js/index.js' } );
+} );
 
-  // ---
+gulp.task( 'node-restart', function() {
+  server.restart();
+} );
 
-  gulp.task( 'browser-init', function() {
-    browserSync.init( {
-      proxy: 'localhost:3000'
-    } );
-  } );
+gulp.task( 'node-watch', function() {
+  gulp.watch( [ './js/**' ], [ 'node-restart' ] );
+} );
 
-  gulp.task( 'browser-watch', function() {
-    gulp.watch( [ './dist/**', '!./dist/**/*.css' ], function() {
-      browserSync.reload();
-    } );
-  } );
+// ---
 
-  // ---
+gulp.task( 'clean', function() {
+  recursiveUnlink( './dist' );
+} );
 
-  gulp.task( 'node-start', function() {
-    server.listen( { path: './index.js' } );
-  } );
+// ---
 
-  gulp.task( 'node-restart', function() {
-    server.restart();
-  } );
+gulp.task( 'watch', [
+  'static-watch',
+  'style-watch',
+  'script-watch'
+] );
 
-  gulp.task( 'node-watch', function() {
-    gulp.watch( [ './*', './js/**' ], [ 'node-restart' ] );
-  } );
+gulp.task( 'build', [
+  'static-build',
+  'style-build',
+  'script-build'
+] );
 
-  // ---
+gulp.task( 'node', [
+  'node-start',
+  'node-watch'
+] );
 
-  gulp.task( 'clean', function() {
-    fs.unlink( './dist/main.css' );
-    fs.unlink( './dist/main.js' );
-  } );
+gulp.task( 'browser', [
+  'browser-init',
+  'browser-watch'
+] );
 
-  // ---
+gulp.task( 'dev', [
+  'build',
+  'watch',
+  'node',
+  'browser'
+] );
 
-  gulp.task( 'watch', [
-    'style-watch',
-    'script-watch',
-    'browser-watch',
-    'node-watch'
-  ] );
-
-  gulp.task( 'build', [
-    'style-build',
-    'script-build'
-  ] );
-
-  gulp.task( 'dev', [
-    'build',
-    'node-start',
-    'browser-init',
-    'watch'
-  ] );
-
-  gulp.task( 'default', [
-    'dev'
-  ] );
-
-} )();
+gulp.task( 'default', [
+  'dev'
+] );

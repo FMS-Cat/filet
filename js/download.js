@@ -12,19 +12,19 @@ module.exports = ( function() {
 
   let download = function( _req, _res ) {
 
-    let path = _req.body.path;
-    if ( !path ) {
-      _res.status( 400 ).send( 'file path is required' );
+    let path = decodeURI( _req.url.replace( /\/download(.*)/, '$1' ) );
+    path = pathlib.join( process.cwd(), path );
+    if ( /^\.\.\//.test( pathlib.relative( process.cwd(), path ) ) ) {
+      _res.status( 400 ).send( 'invalid path' );
       return;
     }
-    path = path.replace( /\.{2,}/, '.' );
 
-    fs.stat( pathlib.join( process.cwd(), path ), function( _error, _stat ) {
+    fs.stat( path, function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
           _res.status( 404 ).send( 'no such file or directory' );
         } else {
-          _res.status( 500 ).send( 'something goes wrong' );
+          _res.status( 500 ).send( 'something went wrong' );
           console.error( _error );
         }
         return;
@@ -38,7 +38,7 @@ module.exports = ( function() {
         out.on( 'close', function() {
           _res.sendFile( zipPath, sendFileOptions, function( _error ) {
             if ( _error ) {
-              _res.status( 500 ).send( 'something goes wrong' );
+              _res.status( 500 ).send( 'something went wrong' );
               console.error( _error );
               return;
             }
@@ -47,7 +47,7 @@ module.exports = ( function() {
         } );
 
         zip.on( 'error', function( _error ) {
-          _res.status( 500 ).send( 'something goes wrong' );
+          _res.status( 500 ).send( 'something went wrong' );
           console.error( _error );
         } );
 
@@ -61,7 +61,7 @@ module.exports = ( function() {
 
           fs.stat( _path, function( _error, _stat ) {
             if ( _error ) {
-              _res.status( 500 ).send( 'something goes wrong' );
+              _res.status( 500 ).send( 'something went wrong' );
               console.error( _error );
               return;
             }
@@ -69,7 +69,7 @@ module.exports = ( function() {
             if ( _stat.isDirectory() ) {
               fs.readdir( _path, function( _error, _files ) {
                 if ( _error ) {
-                  _res.status( 500 ).send( 'something goes wrong' );
+                  _res.status( 500 ).send( 'something went wrong' );
                   console.error( _error );
                   return;
                 }
@@ -90,21 +90,21 @@ module.exports = ( function() {
             } else {
               zip.append(
                 fs.createReadStream( _path ),
-                { name: pathlib.relative( pathlib.join( process.cwd(), path ), _path ) }
+                { name: pathlib.relative( path, _path ) }
               );
               if ( typeof _callback === 'function' ) { _callback(); }
             }
           } );
         };
 
-        addRecursive( pathlib.join( process.cwd(), path ), function() {
+        addRecursive( path, function() {
           zip.finalize();
         } );
 
       } else {
-        _res.sendFile( pathlib.join( process.cwd(), path ), sendFileOptions, function( _error ) {
+        _res.sendFile( path, sendFileOptions, function( _error ) {
           if ( _error ) {
-            _res.status( 500 ).send( 'something goes wrong' );
+            _res.status( 500 ).send( 'something went wrong' );
             console.error( _error );
             return;
           }
