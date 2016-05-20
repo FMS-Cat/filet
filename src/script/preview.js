@@ -4,6 +4,8 @@ let el = require( './el' );
 let get = require( './get' );
 let byteformat = require( './byteformat' );
 let computeSize = require( './compute-size' );
+let selectIcon = require( './select-icon' );
+
 let download = require( './download' );
 
 let preview = function( _item ) {
@@ -108,21 +110,35 @@ let preview = function( _item ) {
     class: 'props'
   } );
 
-  let name = el( {
+  el( {
+    tag: 'img',
+    parent: props,
+    class: 'icon',
+    src: ( function() {
+      let staticIcon = location.href.replace( /\/browser.*/, '/static/icon/' );
+      if ( _item.dir ) {
+        return staticIcon + 'dir.svg';
+      } else {
+        return staticIcon + selectIcon( _item.name );
+      }
+    } )()
+  } );
+
+  el( {
     tag: 'div',
     parent: props,
     class: 'name',
     innerText: _item.name
   } );
 
-  let date = el( {
+  el( {
     tag: 'div',
     parent: props,
     class: 'date',
     innerText: new Date( _item.stats.mtime ).toLocaleString()
   } );
 
-  let size = el( {
+  el( {
     tag: 'div',
     parent: props,
     class: 'size',

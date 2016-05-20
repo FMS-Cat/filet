@@ -1,0 +1,76 @@
+#balloonContainer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 480px;
+  z-index: 30;
+
+  .balloon {
+    width: calc( 100% - 32px );
+    padding: 2px 8px;
+    margin: 8px;
+
+    border-radius: 4px;
+    opacity: 0.9;
+    background: #39f;
+    color: #fff;
+    cursor: pointer;
+
+    // ------
+
+    & .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    & .message {
+      font-size: 12px;
+    }
+
+    // ------
+
+    &.success {
+      background: #7d1;
+    }
+
+    &.localError {
+      background: #f63;
+    }
+
+    &.serverError {
+      background: #f37;
+    }
+
+    // ------
+
+    animation: ani-balloon-start 0.2s;
+
+    &.end {
+      animation: ani-balloon-end 0.2s;
+    }
+  }
+
+  @keyframes ani-balloon-start {
+    0% {
+      transform: translateX( 40px );
+      opacity: 0.0;
+    }
+
+    100% {
+      transform: translateX( 0px );
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes ani-balloon-end {
+    0% {
+      transform: scale( 1.0 );
+      opacity: 0.9;
+    }
+
+    100% {
+      transform: scale( 0.9 );
+      opacity: 0.0;
+    }
+  }
+}

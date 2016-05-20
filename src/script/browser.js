@@ -35,8 +35,8 @@ let loadPreview = function( _path ) {
 };
 
 let browser = function( _path, _isDir, _dontPush ) {
-  let nDir = _isDir ? _path : _path.replace( /\/[^/]*$/, '/' );
   let pDir = path ? ( isDir ? path : path.replace( /\/[^/]*$/, '/' ) ) : '';
+  let nDir = _path ? ( _isDir ? _path : _path.replace( /\/[^/]*$/, '/' ) ) : pDir;
 
   path = _path || path;
   isDir = _isDir;
@@ -59,7 +59,7 @@ let browser = function( _path, _isDir, _dontPush ) {
 
   let elList = document.getElementById( 'list' );
   if ( elList ) {
-    if ( nDir !== pDir ) {
+    if ( nDir !== pDir || !_path ) {
       loadList( nDir, elList );
     }
   } else {

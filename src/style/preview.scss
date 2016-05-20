@@ -27,8 +27,10 @@
 
     .content {
       position: absolute;
+      overflow: hidden;
 
       pointer-events: all;
+      border-radius: 4px;
 
       &.image {
         background: #fff;
@@ -42,7 +44,8 @@
       }
 
       &.ace {
-        width: 100%;
+        left: 80px;
+        width: 600px;
         height: 100%;
       }
     }
@@ -59,24 +62,37 @@
     color: #fff;
     border-radius: 4px;
 
-    .name {
+    .icon {
       position: absolute;
       left: calc( 50% - 340px );
+      top: 15px;
+      width: 30px;
+      height: 30px;
+
+      @include filter( invert( 100% ) );
+    }
+
+    .name {
+      position: absolute;
+      left: calc( 50% - 300px );
       top: 10px;
+
       font-size: 20px;
     }
 
     .date {
       position: absolute;
-      left: calc( 50% - 340px );
+      left: calc( 50% - 300px );
       top: 36px;
+
       font-size: 10px;
     }
 
     .size {
       position: absolute;
-      left: calc( 50% - 340px + 120px );
+      left: calc( 50% - 300px + 120px );
       top: 36px;
+
       font-size: 10px;
     }
 
@@ -89,6 +105,7 @@
         width: 30px;
         height: 30px;
         padding: 5px;
+
         @include filter( invert( 100% ) );
       }
     }
