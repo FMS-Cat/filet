@@ -205,7 +205,11 @@ let list = function( _data ) {
       uploadBg.classList.add( 'off' );
       uploadIcon.classList.remove( 'on' );
       uploadIcon.classList.add( 'drop' );
-      upload( _data.path, _event.dataTransfer.files );
+
+      let files = _event.dataTransfer.files;
+      for ( let iFile = 0; iFile < files.length; iFile ++ ) {
+        upload( _data.path, files[ iFile ] );
+      }
     },
   } );
 

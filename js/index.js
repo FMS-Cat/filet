@@ -6,7 +6,9 @@
   let pathlib = require( 'path' );
   let app = express();
   let multer = require( 'multer' );
-  let upload = multer();
+  let upload = multer( {
+    dest: pathlib.join( process.cwd(), '.filet/temp' )
+  } );
 
   app.get( '/list/**', require( './list' ) );
   app.get( '/property/**', require( './property' ) );

@@ -31,7 +31,7 @@ module.exports = ( function() {
       }
 
       if ( _stat.isDirectory() ) {
-        let zipPath = pathlib.join( __dirname, '../temp', ( +new Date() ) + '.zip' );
+        let zipPath = pathlib.join( process.cwd(), '.filet/temp', ( +new Date() ) + '.zip' );
         let out = fs.createWriteStream( zipPath );
         let zip = archiver( 'zip' );
 

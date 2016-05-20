@@ -9,48 +9,39 @@ module.exports = ( function() {
 
     let path = _req.body.path;
     if ( !path ) {
-      _res.status( 400 ).send( 'file path is required' );
-      return;
+      return _res.status( 400 ).send( 'file path is required' );
     }
     path = pathlib.join( process.cwd(), path );
     if ( /^\.\.\//.test( pathlib.relative( process.cwd(), path ) ) ) {
-      _res.status( 400 ).send( 'invalid path' );
-      return;
+      return _res.status( 400 ).send( 'invalid path' );
     }
 
     fs.stat( path, function( _error, _stat ) {
       if ( _error ) {
         if ( _error.code === 'ENOENT' ) {
-          _res.status( 404 ).send( 'no such directory' );
+          return _res.status( 404 ).send( 'no such directory' );
         } else {
-          _res.status( 500 ).send( 'something went wrong' );
           console.error( _error );
+          return _res.status( 500 ).send( 'something went wrong' );
         }
-        return;
       }
 
       if ( !_stat.isDirectory() ) {
-        _res.status( 400 ).send( 'you can only upload files to directory' );
-        return;
+        return _res.status( 400 ).send( 'you can only upload files to directory' );
       }
 
       let go = function() {
         if ( _req.files.length === 0 ) {
-          _res.status( 200 ).send( 'done' );
-          return;
+          return _res.status( 200 ).send();
         }
 
         let file = _req.files.shift();
-        let name = file.originalname;
-        let buffer = file.buffer;
-
-        fs.writeFile( pathlib.join( path, name ), buffer, function( _error ) {
+        let name = pathlib.join( path, file.originalname );
+        fs.rename( file.path, name, function( _error ) {
           if ( _error ) {
-            _res.status( 500 ).send( 'something went wrong' );
             console.error( _error );
-            return;
+            return _res.status( 500 ).send( 'something went wrong' );
           }
-
           go();
         } );
       };
