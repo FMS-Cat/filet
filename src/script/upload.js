@@ -8,8 +8,7 @@ let post = require( './post' );
 module.exports = function upload( _path, _files ) {
   let balloon = new Balloon( {
     title: 'Uploading',
-    message: 'Progress: calculating',
-    timeout: 10
+    message: 'Progress: calculating'
   } );
 
   post( {
