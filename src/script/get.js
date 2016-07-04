@@ -1,8 +1,8 @@
-module.exports = function get( _params ) {
+let get = ( _params ) => {
 
   let params = {
     'url': 'about:blank',
-    'callback': function( _status, _data ) {},
+    'callback': ( _status, _data ) => {},
     'responseType': 'text'
   };
 
@@ -12,7 +12,7 @@ module.exports = function get( _params ) {
 
   let xhr = new XMLHttpRequest();
 
-  xhr.onload = function() {
+  xhr.onload = () => {
     params.callback( xhr.status, xhr.response );
   }
 
@@ -21,3 +21,5 @@ module.exports = function get( _params ) {
   xhr.send();
 
 };
+
+export default get;

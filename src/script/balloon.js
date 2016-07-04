@@ -1,5 +1,3 @@
-'use strict';
-
 let balloonContainer = document.createElement( 'div' );
 container.appendChild( balloonContainer );
 balloonContainer.id = 'balloonContainer';
@@ -37,7 +35,7 @@ let Balloon = class {
 
     // ---
 
-    it.element.addEventListener( 'click', function() {
+    it.element.addEventListener( 'click', () => {
       if ( !it.props.hold ) {
         it.end();
       }
@@ -49,7 +47,7 @@ let Balloon = class {
 
     if ( it.element ) {
       it.element.classList.add( 'end' );
-      it.element.addEventListener( 'animationend', function() {
+      it.element.addEventListener( 'animationend', () => {
         if ( it.element ) { it.remove(); }
       } );
     }
@@ -73,7 +71,7 @@ let Balloon = class {
     it.title.innerText = it.props.title;
     it.message.innerText = it.props.message;
 
-    it.props.classes.map( function( _class ) {
+    it.props.classes.map( ( _class ) => {
       it.element.classList.add( _class );
     } );
 
@@ -86,11 +84,11 @@ let Balloon = class {
     }
 
     if ( 0 < it.props.timeout ) {
-      setTimeout( function() {
+      setTimeout( () => {
         it.end();
       }, it.props.timeout * 1000.0 );
     }
   }
 };
 
-module.exports = Balloon;
+export default Balloon;

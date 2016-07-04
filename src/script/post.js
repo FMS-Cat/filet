@@ -1,10 +1,10 @@
-module.exports = function post( _params ) {
+let post = ( _params ) => {
 
   let params = {
     'url': 'about:blank',
     'data': {},
-    'uploadProgress': function( _event ) {},
-    'callback': function( _status, _data ) {},
+    'uploadProgress': ( _event ) => {},
+    'callback': ( _status, _data ) => {},
     'responseType': 'text'
   };
 
@@ -28,7 +28,7 @@ module.exports = function post( _params ) {
 
   let xhr = new XMLHttpRequest();
 
-  xhr.addEventListener( 'load', function() {
+  xhr.addEventListener( 'load', () => {
     params.callback( xhr.status, xhr.response );
   } );
 
@@ -39,3 +39,6 @@ module.exports = function post( _params ) {
   xhr.send( formData );
 
 };
+
+
+export default post;

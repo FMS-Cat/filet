@@ -1,26 +1,24 @@
-'use strict';
-
-let el = require( './el' );
-let selectIcon = require( './select-icon' );
-let DnD = require( './dnd' );
+import el from './el';
+import selectIcon from './select-icon';
+import DnD from './dnd';
 let dnd;
-let byteformat = require( './byteformat' );
+import byteformat from './byteformat';
 
-let post = require( './post' );
-let download = require( './download' );
-let rename = require( './rename' );
-let mkdir = require( './mkdir' );
-let unlink = require( './unlink' );
-let upload = require( './upload' );
+import post from './post';
+import download from './download';
+import rename from './rename';
+import mkdir from './mkdir';
+import unlink from './unlink';
+import upload from './upload';
 
-let list = function( _data ) {
+let list = ( _data ) => {
   let list = el( {
     tag: 'div',
     parent: container,
     id: 'list'
   } );
 
-  _data.items.sort( function( _a, _b ) {
+  _data.items.sort( ( _a, _b ) => {
     if ( _a.dir !== _b.dir ) {
       return _b.dir - _a.dir;
     } else {
@@ -28,9 +26,9 @@ let list = function( _data ) {
     }
   } );
 
-  _data.items.map( function( _item ) {
+  _data.items.map( ( _item ) => {
 
-    let onclick = function() {
+    let onclick = () => {
       let path = _item.path + '/' + _item.name;
       path = path.replace( /\/{2,}/, '/' );
       browser( path, !!_item.dir );
@@ -48,7 +46,7 @@ let list = function( _data ) {
       tag: 'img',
       parent: item,
       class: 'icon',
-      src: ( function() {
+      src: ( () => {
         let staticIcon = location.href.replace( /\/browser.*/, '/static/icon/' );
         if ( _item.dir ) {
           return staticIcon + 'dir.svg';
@@ -93,7 +91,7 @@ let list = function( _data ) {
       parent: itemButtons,
       src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
       class: [ 'button', 'download', 'hover' ],
-      onclick: function() {
+      onclick: () => {
         download( _item.path + '/' + _item.name, !!_item.dir );
       }
     } );
@@ -103,7 +101,7 @@ let list = function( _data ) {
       parent: itemButtons,
       src: location.href.replace( /\/browser.*/, '/static/image/rename.svg' ),
       class: [ 'button', 'rename', 'hover' ],
-      onclick: function() {
+      onclick: () => {
         let name = prompt( 'new name', _item.name );
         if ( name ) {
           rename( _item.path + '/' + _item.name, name );
@@ -116,7 +114,7 @@ let list = function( _data ) {
       parent: itemButtons,
       src: location.href.replace( /\/browser.*/, '/static/image/delete.svg' ),
       class: [ 'button', 'delete', 'hover' ],
-      onclick: function() {
+      onclick: () => {
         if ( confirm( 'delete ' + _item.name + '?' ) ) {
           unlink( _item.path + '/' + _item.name );
         }
@@ -151,7 +149,7 @@ let list = function( _data ) {
     parent: headButtons,
     src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
     class: [ 'button', 'hover', 'download' ],
-    onclick: function() {
+    onclick: () => {
       download( _data.path, true );
     }
   } );
@@ -161,7 +159,7 @@ let list = function( _data ) {
     parent: headButtons,
     src: location.href.replace( /\/browser.*/, '/static/image/mkdir.svg' ),
     class: [ 'button', 'hover', 'mkdir' ],
-    onclick: function() {
+    onclick: () => {
       let name = prompt( 'folder name', 'New Folder' );
       if ( name ) {
         mkdir( _data.path, name );
@@ -187,20 +185,20 @@ let list = function( _data ) {
   if ( typeof dnd === 'function' ) { dnd(); }
   dnd = DnD( {
     element: list,
-    enter: function() {
+    enter: () => {
       uploadBg.classList.add( 'on' );
       uploadBg.classList.remove( 'off' );
       uploadIcon.classList.add( 'on' );
       uploadIcon.classList.remove( 'off' );
       uploadIcon.classList.remove( 'drop' );
     },
-    leave: function() {
+    leave: () => {
       uploadBg.classList.remove( 'on' );
       uploadBg.classList.add( 'off' );
       uploadIcon.classList.remove( 'on' );
       uploadIcon.classList.add( 'off' );
     },
-    drop: function( _event ) {
+    drop: ( _event ) => {
       uploadBg.classList.remove( 'on' );
       uploadBg.classList.add( 'off' );
       uploadIcon.classList.remove( 'on' );

@@ -1,4 +1,4 @@
-let computeSize = function( _w0, _h0, _w1, _h1, _el ) {
+let computeSize = ( _w0, _h0, _w1, _h1, _el ) => {
   let x, y, w, h;
 
   if ( _w0 / _w1 < _h0 / _h1 ) {
@@ -21,4 +21,4 @@ let computeSize = function( _w0, _h0, _w1, _h1, _el ) {
   return { x : x, y : y, w : w, h : h };
 };
 
-module.exports = computeSize;
+export default computeSize;

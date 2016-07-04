@@ -1,21 +1,15 @@
-module.exports = ( function() {
+import post from './post';
 
-  'use strict';
-
-  let post = require( './post' );
-
-  let unlink = function( _path ) {
-    post( {
-      'url': location.href.replace( /\/browser.*/, '/unlink' ),
-      'data': { 'path': _path },
-      'callback': function( _status ) {
-        if ( _status === 200 ) {
-          browser( null, true, true );
-        }
+let unlink = ( _path ) => {
+  post( {
+    'url': location.href.replace( /\/browser.*/, '/unlink' ),
+    'data': { 'path': _path },
+    'callback': ( _status ) => {
+      if ( _status === 200 ) {
+        browser( null, true, true );
       }
-    } );
-  };
+    }
+  } );
+};
 
-  return unlink;
-
-} )();
+export default post;

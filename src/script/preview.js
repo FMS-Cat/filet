@@ -1,14 +1,11 @@
-'use strict';
+import el from './el';
+import get from './get';
+import byteformat from './byteformat';
+import computeSize from './compute-size';
+import selectIcon from './select-icon';
+import download from './download';
 
-let el = require( './el' );
-let get = require( './get' );
-let byteformat = require( './byteformat' );
-let computeSize = require( './compute-size' );
-let selectIcon = require( './select-icon' );
-
-let download = require( './download' );
-
-let preview = function( _item ) {
+let preview = ( _item ) => {
   let preview = el( {
     tag: 'div',
     parent: container,
@@ -19,7 +16,7 @@ let preview = function( _item ) {
     tag: 'div',
     parent: preview,
     class: 'bg',
-    onclick: function() {
+    onclick: () => {
       browser( _item.path.replace( /\/[^/]*$/, '/' ), true );
     }
   } );
@@ -41,7 +38,7 @@ let preview = function( _item ) {
       src: location.href.replace( /\/browser/, '/file' )
     } );
 
-    let resize = function() {
+    let resize = () => {
       let rect = body.getBoundingClientRect();
       let size = computeSize( img.naturalWidth, img.naturalHeight, rect.right - rect.left, rect.bottom - rect.top, img );
     }
@@ -50,7 +47,7 @@ let preview = function( _item ) {
     window.addEventListener( 'resize', resize );
 
   } else if ( /\.mp3$/.test( _item.name ) ) {
-    let vid = el( {
+    let aud = el( {
       tag: 'audio',
       parent: body,
       controls: true,
@@ -68,7 +65,7 @@ let preview = function( _item ) {
       src: location.href.replace( /\/browser/, '/stream' )
     } );
 
-    let resize = function() {
+    let resize = () => {
       let rect = body.getBoundingClientRect();
       let size = computeSize( vid.videoWidth, vid.videoHeight, rect.right - rect.left, rect.bottom - rect.top, vid );
     }
@@ -77,7 +74,7 @@ let preview = function( _item ) {
     window.addEventListener( 'resize', resize );
 
   } else {
-    let vid = el( {
+    let elAce = el( {
       tag: 'div',
       parent: body,
       id: 'ace',
@@ -94,7 +91,7 @@ let preview = function( _item ) {
 
     get( {
       'url': location.href.replace( /\/browser/, '/file' ),
-      'callback': function( _status, _data ) {
+      'callback': ( _status, _data ) => {
         if ( _status === 200 ) {
           editor.setValue( _data, -1 );
         }
@@ -114,7 +111,7 @@ let preview = function( _item ) {
     tag: 'img',
     parent: props,
     class: 'icon',
-    src: ( function() {
+    src: ( () => {
       let staticIcon = location.href.replace( /\/browser.*/, '/static/icon/' );
       if ( _item.dir ) {
         return staticIcon + 'dir.svg';
@@ -156,11 +153,11 @@ let preview = function( _item ) {
     parent: buttons,
     src: location.href.replace( /\/browser.*/, '/static/image/download.svg' ),
     class: [ 'button', 'hover', 'download' ],
-    onclick: function() {
+    onclick: () => {
       download( _item.path, false );
     }
   } );
 
 };
 
-module.exports = preview;
+export default preview;

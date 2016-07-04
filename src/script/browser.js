@@ -1,17 +1,16 @@
-'use strict';
+import get from './get';
 
-let get = require( './get' );
+import list from './list';
+import preview from './preview';
 
 let path;
 let isDir;
-let list = require( './list' );
-let preview = require( './preview' );
 
-let loadList = function( _path, _elList ) {
+let loadList = ( _path, _elList ) => {
   get( {
     'url': location.href.replace( /\/browser.*/, '/list' + _path ),
     'responseType': 'text',
-    'callback': function( _status, _data ) {
+    'callback': ( _status, _data ) => {
       if ( _status === 200 ) {
         if ( _elList ) {
           container.removeChild( _elList );
@@ -22,11 +21,11 @@ let loadList = function( _path, _elList ) {
   } );
 };
 
-let loadPreview = function( _path ) {
+let loadPreview = ( _path ) => {
   get( {
     'url': location.href.replace( /\/browser.*/, '/property' + _path ),
     'responseType': 'text',
-    'callback': function( _status, _data ) {
+    'callback': ( _status, _data ) => {
       if ( _status === 200 ) {
         preview( JSON.parse( _data ) );
       }
@@ -34,7 +33,7 @@ let loadPreview = function( _path ) {
   } );
 };
 
-let browser = function( _path, _isDir, _dontPush ) {
+let browser = ( _path, _isDir, _dontPush ) => {
   let pDir = path ? ( isDir ? path : path.replace( /\/[^/]*$/, '/' ) ) : '';
   let nDir = _path ? ( _isDir ? _path : _path.replace( /\/[^/]*$/, '/' ) ) : pDir;
 
@@ -75,8 +74,8 @@ let browser = function( _path, _isDir, _dontPush ) {
   }
 };
 
-window.addEventListener( 'popstate', function( _event ) {
+window.addEventListener( 'popstate', ( _event ) => {
   browser( _event.state.path, _event.state.isDir, true );
 } );
 
-module.exports = browser;
+export default browser;

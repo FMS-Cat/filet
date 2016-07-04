@@ -1,4 +1,4 @@
-let byteformat = function( _size ) {
+let byteformat = ( _size ) => {
   let prefix = [ ' B', ' KB', ' MB', ' GB', ' TB', ' PB' ];
   let exp = 0;
   let number = _size;
@@ -13,4 +13,4 @@ let byteformat = function( _size ) {
   return numDisplay + prefix[ exp ];
 };
 
-module.exports = byteformat;
+export default byteformat;

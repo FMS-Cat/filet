@@ -1,10 +1,2 @@
-( function() {
-
-  'use strict';
-
-  // ------
-
-  let browser = require( './browser' );
-  window.browser = browser;
-
-} )();
+import browser from './browser';
+window.browser = browser;

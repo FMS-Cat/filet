@@ -1,11 +1,9 @@
-'use strict';
+import el from './el';
+import Balloon from './balloon';
 
-let el = require( './el' );
-let Balloon = require( './balloon' );
+import post from './post';
 
-let post = require( './post' );
-
-module.exports = function upload( _path, _files ) {
+let upload = ( _path, _files ) => {
   let balloon = new Balloon( {
     title: 'Uploading',
     message: 'Progress: calculating'
@@ -17,7 +15,7 @@ module.exports = function upload( _path, _files ) {
       path: _path,
       files: _files
     },
-    uploadProgress: function( _event ) {
+    uploadProgress: ( _event ) => {
       if ( _event.lengthComputable ) {
         let prog = ( _event.loaded / _event.total * 100.0 ).toFixed( 1 );
         balloon.set( {
@@ -26,7 +24,7 @@ module.exports = function upload( _path, _files ) {
         } );
       }
     },
-    callback: function( _status, _data ) {
+    callback: ( _status, _data ) => {
       if ( _status === 200 ) {
         if ( window.history.state.path === _path ) {
           balloon.set( {
@@ -41,3 +39,5 @@ module.exports = function upload( _path, _files ) {
     }
   } );
 };
+
+export default upload;
