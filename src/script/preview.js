@@ -85,7 +85,6 @@ let preview = ( _item ) => {
     editor.setReadOnly( true );
     editor.setTheme( 'ace/theme/monokai' );
     let modelist = ace.require( 'ace/ext/modelist' );
-    console.log( modelist );
     let mode = modelist.getModeForPath( _item.name ).mode;
     editor.session.setMode( mode );
 
