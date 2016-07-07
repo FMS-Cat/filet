@@ -86,6 +86,33 @@ let list = ( _data ) => {
       class: 'buttons'
     } );
 
+    if ( _item.config.m ) {
+      el( {
+        tag: 'img',
+        parent: itemButtons,
+        src: location.href.replace( /\/browser.*/, '/static/image/rename.svg' ),
+        class: [ 'button', 'rename', 'hover' ],
+        onclick: () => {
+          let name = prompt( 'new name', _item.name );
+          if ( name ) {
+            rename( _item.path + '/' + _item.name, name );
+          }
+        }
+      } );
+
+      el( {
+        tag: 'img',
+        parent: itemButtons,
+        src: location.href.replace( /\/browser.*/, '/static/image/delete.svg' ),
+        class: [ 'button', 'delete', 'hover' ],
+        onclick: () => {
+          if ( confirm( 'delete ' + _item.name + '?' ) ) {
+            unlink( _item.path + '/' + _item.name );
+          }
+        }
+      } );
+    }
+
     el( {
       tag: 'img',
       parent: itemButtons,
@@ -93,31 +120,6 @@ let list = ( _data ) => {
       class: [ 'button', 'download', 'hover' ],
       onclick: () => {
         download( _item.path + '/' + _item.name, !!_item.dir );
-      }
-    } );
-
-    el( {
-      tag: 'img',
-      parent: itemButtons,
-      src: location.href.replace( /\/browser.*/, '/static/image/rename.svg' ),
-      class: [ 'button', 'rename', 'hover' ],
-      onclick: () => {
-        let name = prompt( 'new name', _item.name );
-        if ( name ) {
-          rename( _item.path + '/' + _item.name, name );
-        }
-      }
-    } );
-
-    el( {
-      tag: 'img',
-      parent: itemButtons,
-      src: location.href.replace( /\/browser.*/, '/static/image/delete.svg' ),
-      class: [ 'button', 'delete', 'hover' ],
-      onclick: () => {
-        if ( confirm( 'delete ' + _item.name + '?' ) ) {
-          unlink( _item.path + '/' + _item.name );
-        }
       }
     } );
 
@@ -144,6 +146,21 @@ let list = ( _data ) => {
     class: 'buttons'
   } );
 
+  if ( _data.config.a ) {
+    el( {
+      tag: 'img',
+      parent: headButtons,
+      src: location.href.replace( /\/browser.*/, '/static/image/mkdir.svg' ),
+      class: [ 'button', 'hover', 'mkdir' ],
+      onclick: () => {
+        let name = prompt( 'folder name', 'New Folder' );
+        if ( name ) {
+          mkdir( _data.path, name );
+        }
+      }
+    } );
+  }
+
   el( {
     tag: 'img',
     parent: headButtons,
@@ -151,19 +168,6 @@ let list = ( _data ) => {
     class: [ 'button', 'hover', 'download' ],
     onclick: () => {
       download( _data.path, true );
-    }
-  } );
-
-  el( {
-    tag: 'img',
-    parent: headButtons,
-    src: location.href.replace( /\/browser.*/, '/static/image/mkdir.svg' ),
-    class: [ 'button', 'hover', 'mkdir' ],
-    onclick: () => {
-      let name = prompt( 'folder name', 'New Folder' );
-      if ( name ) {
-        mkdir( _data.path, name );
-      }
     }
   } );
 
