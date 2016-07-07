@@ -6,7 +6,8 @@ import post from './post';
 let upload = ( _path, _files ) => {
   let balloon = new Balloon( {
     title: 'Uploading',
-    message: 'Progress: calculating'
+    message: 'Progress: calculating',
+    hold: true
   } );
 
   post( {
@@ -31,7 +32,8 @@ let upload = ( _path, _files ) => {
             title: 'Done!',
             message: 'Progress: 100.0 %',
             background: '#1c7',
-            timeout: 1
+            timeout: 1,
+            hold: false
           } );
           browser( null, true, true );
         }

@@ -10,6 +10,11 @@
     dest: pathlib.join( process.cwd(), '.filet/temp' )
   } );
 
+  let extendedTimeout = function( _req, _res, _next ) {
+    _res.setTimeout( 3000000, function() {} );
+    _next();
+  };
+
   app.get( '/list/**', require( './list' ) );
   app.get( '/property/**', require( './property' ) );
   app.get( '/download/**', require( './download' ) );
@@ -17,7 +22,7 @@
   app.post( '/unlink', upload.array(), require( './unlink' ) );
   app.post( '/rename', upload.array(), require( './rename' ) );
   app.post( '/mkdir', upload.array(), require( './mkdir' ) );
-  app.post( '/upload', upload.array( 'files' ), require( './upload' ) );
+  app.post( '/upload', extendedTimeout, upload.array( 'files' ), require( './upload' ) );
   app.use( '/browser', require( './browser' ) );
   app.use( '/file', express.static( process.cwd() ) );
   app.use( '/static', express.static( pathlib.join( __dirname, '../dist' ) ) );
