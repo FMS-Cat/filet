@@ -4,6 +4,7 @@ import byteformat from './byteformat';
 import computeSize from './compute-size';
 import selectIcon from './select-icon';
 import download from './download';
+import marked from './lib/marked';
 
 let preview = ( _item ) => {
   let preview = el( {
@@ -46,7 +47,7 @@ let preview = ( _item ) => {
 
     window.addEventListener( 'resize', resize );
 
-  } else if ( /\.mp3$/.test( _item.name ) ) {
+  } else if ( /\.(wav|mp3|ogg)$/.test( _item.name ) ) {
     let aud = el( {
       tag: 'audio',
       parent: body,
@@ -55,7 +56,7 @@ let preview = ( _item ) => {
       src: location.href.replace( /\/browser/, '/stream' )
     } );
 
-  } else if ( /\.mp4$/.test( _item.name ) ) {
+  } else if ( /\.(mp4|webm)$/.test( _item.name ) ) {
     let vid = el( {
       tag: 'video',
       parent: body,
@@ -73,7 +74,22 @@ let preview = ( _item ) => {
 
     window.addEventListener( 'resize', resize );
 
-  } else {
+  } else if ( /\.(md)$/.test( _item.name ) ) {
+    let elMd = el( {
+      tag: 'div',
+      parent: body,
+      class: [ 'content', 'md' ]
+    } );
+
+    get( {
+      'url': location.href.replace( /\/browser/, '/file' ),
+      'callback': ( _status, _data ) => {
+        if ( _status === 200 ) {
+          elMd.innerHTML = marked( _data );
+        }
+      }
+    } );
+  } else if ( _item.stats.size < 1048576 ) {
     let elAce = el( {
       tag: 'div',
       parent: body,

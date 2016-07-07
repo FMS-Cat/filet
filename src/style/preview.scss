@@ -48,6 +48,17 @@
         width: 600px;
         height: 100%;
       }
+
+      &.md {
+        left: calc( 50% - 300px );
+        padding: 10px 40px;
+        width: calc( 600px - 80px );
+        height: calc( 100% - 20px );
+        overflow: scroll;
+
+        background: #fff;
+        color: #000;
+      }
     }
   }
 

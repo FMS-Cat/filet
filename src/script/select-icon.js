@@ -1,6 +1,10 @@
 let selectIcon = ( _name ) => {
 
-  if ( _name.match( /\.(htm|html|xml)$/ ) ) {
+  if ( _name.match( /\.(txt)$/ ) ) {
+    return 'text.svg';
+  } else if ( _name.match( /\.(md)$/ ) ) {
+    return 'md.svg';
+  } else if ( _name.match( /\.(htm|html|xml)$/ ) ) {
     return 'xml.svg';
   } else if ( _name.match( /\.(js)$/ ) ) {
     return 'js.svg';
